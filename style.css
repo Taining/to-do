@@ -1,3 +1,26 @@
+/* login signup */
+table.login {
+    margin: 50px auto;
+}
+table.login tr{
+    line-height: 30px;
+}
+
+table.login .submit {
+    background-color: #DA816C;
+    border: 1px solid #000000;
+    font-weight: bold;
+}
+
+table.login td a {
+    text-decoration: none;
+    font-size: 14px;
+}
+
+table.login .error {
+    color: red;
+}
+
 h1 {
 
 }

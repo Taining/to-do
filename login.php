@@ -4,17 +4,26 @@
 
     session_start();
     $errMessage = "";
+    $email = "";
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
-        if(isset($_POST['user']) && isset($_POST['password'])){
+        if(isset($_POST['email']) && isset($_POST['password'])){
             $dbconn = pg_connect("host=localhost port=5432 dbname=$db_name user=$db_user password=$db_password");
             if(!$dbconn){
                 $errMessage = "Connect to server failed";
                 exit;
             } 
             
-            $result = pg_query($dbconn, "SELECT * FROM appuser WHERE username = '$_POST[user]' AND password = '$_POST[password]'");
+            $email = $_POST['email'];
+            $password = md5($_POST['password']);
+
+            $select_user_query = ("SELECT * FROM appuser WHERE email = $1 AND password = $2;");
+            $result = pg_prepare($dbconn, "select_user", $select_user_query);
+            $result = pg_execute($dbconn, "select_user", array($email, $password));
+            
             if(pg_num_rows($result)){
                 $_SESSION['authenticated'] = true;
+                $row = pg_fetch_array($result);
+                $_SESSION['user'] = $row['uid'];
                 header("Location: home.php");
             } else {
                 $errMessage = "Invalid user or password.";
@@ -31,8 +40,8 @@
                 <td colspan="2" class="error"><?php echo($errMessage); ?></td>
             </tr>
             <tr>
-                <td>User Name: </td>
-                <td><input type="text" name="user" size="25" /></td>
+                <td>Email: </td>
+                <td><input type="text" name="email" value="<?php echo $email; ?>"size="25" /></td>
             </tr>
             <tr>
                 <td>Password: </td>

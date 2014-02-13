@@ -3,10 +3,10 @@
 	session_start();
 	require 'header.php';
 
-	$fname = $lname = $email = $reemail = $password = "";
+	$fname = $lname = $email = $reemail = $password = $sex = "";
 	$EMPTY = "";
 	$validated = true;
-	$errMessage = array($EMPTY,$EMPTY,$EMPTY,$EMPTY);
+	$errMessage = array($EMPTY,$EMPTY,$EMPTY,$EMPTY,$EMPTY);
 	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		//validate form input
 		if ($_POST['fname'] == $EMPTY || $_POST['lname'] == $EMPTY) {
@@ -33,6 +33,11 @@
 			$errMessage[3] = "Please enter your password.";
 			$validated = false;
 		}
+		if (!(isset($_POST['sex'])) || $_POST['sex'] == $EMPTY) {
+			$errMessage[4] = "Please select your gender.";
+		} else {
+			$sex = $_POST['sex'];
+		}
 
 		$fname = $_POST['fname'];
 		$lname = $_POST['lname'];
@@ -43,12 +48,18 @@
                 $errMessage = "Connect to server failed";
                 exit;
             } 
-			$insert_user_query = "INSERT INTO appuser (email, fname, lname, password) VALUES($1, $2, $3, $4);";
+			$insert_user_query = "INSERT INTO appuser (email, fname, lname, password, sex) VALUES($1, $2, $3, $4, $5);";
 			$result = pg_prepare($dbconn, "insert_user", $insert_user_query);
-			$result = pg_execute($dbconn, "insert_user", array($email, $fname, $lname, md5($password)));
+			$result = pg_execute($dbconn, "insert_user", array($email, $fname, $lname, md5($password)), $sex);
 
+			preventFormResubmission();
 			header("Location: login.php");
 		}
+	}
+
+
+	function preventFormResubmission(){
+		unset($_POST);
 	}
 ?>
 	
@@ -74,6 +85,14 @@
                 <td colspan="2"><input type="password" name="password" placeholder="New Password" size = "56" /></td>
                 <td class="error"><?php echo $errMessage[3]; ?></td>
             </tr>
+            <tr id="sex">
+            	<td colspan="2">
+         			<label><input type="radio" name="sex" value="1" />Female &nbsp;&nbsp;</label>
+         			<label><input type="radio" name="sex" value="2" />Male </label>
+            	</td>
+            	<td class="error"><?php echo $errMessage[4]; ?></td>
+            </tr>
+            
             <tr>
                 <td></td>
                 <td><input type="submit" class="submit" value="Sign Up" /></td>

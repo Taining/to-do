@@ -6,9 +6,10 @@ CREATE TABLE appuser (
 	fname VARCHAR(20),
 	lname VARCHAR(20),
 	password VARCHAR(100),
+	sex integer,
 	PRIMARY KEY (uid)
 );
 
 -- Adding a sample row to appuser TABLE
 -- Password is 12345
-INSERT INTO appuser (email, fname, lname, password) VALUES ('test@localhost', 'test', 'todo', '827ccb0eea8a706c4c34a16891f84e7b');
+INSERT INTO appuser (email, fname, lname, password, sex) VALUES ('test@localhost', 'test', 'todo', '827ccb0eea8a706c4c34a16891f84e7b', 1);

@@ -21,7 +21,7 @@
 		pg_query($dbconn, $update_query);
 	}
 	
-	$query = "SELECT * FROM tasks WHERE userid=$userid";
+	$query = "SELECT * FROM tasks WHERE uid=$userid";
 	$result = pg_query($dbconn, $query);
 	if(!$result) {
 		echo("Cannot access database.");

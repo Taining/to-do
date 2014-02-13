@@ -21,6 +21,7 @@
 				<nav>
 					<ul>
 						<?php
+    						
 							switch($page) {
 								case "home":
 									echo('<li id="current-page"><a href="home.php">Home</a></li>

@@ -1,28 +1,29 @@
 /* login */
-table.login {
+.form {
     margin: 35px auto;
 }
-table.login input{
-    margin-top: 2px;
-    height: 23px;
+
+.form input{
+    height: 20px;
 	border-radius: 3px;
 	border: 1px solid #bdc7d8;
 	font-size: 13px;
 }
 
-table.login .submit {
+.form .submit {
     background-color: #DA816C;
     border-radius: 3px;
     border: 1px solid #bdc7d8;
     font-weight: bold;
+    height: 25px;
 }
 
-table.login td a {
+.form td a {
     text-decoration: none;
     font-size: 14px;
 }
 
-table.login .error {
+.form .error {
     color: red;
     font-size: 13px;
 }
@@ -43,6 +44,26 @@ table.login .error {
 }
 
 /* sign up */
+
+
+/* account */
+
+.account-form {
+	margin: 50px;
+	margin-left: 0;
+	width: 600px;
+}
+
+.account-form input::-webkit-input-placeholder { font-size: 14px; color: #000; }
+.account-form input::-moz-placeholder { font-size: 14px; color: #000; }
+.account-form input:-ms-input-placeholder { font-size: 14px; color: #000; }
+.account-form input:-moz-placeholder { font-size: 14px; color: #000; }
+
+.account-form .submit {
+	float: right;
+}
+
+/* account */
 
 h1 {
 

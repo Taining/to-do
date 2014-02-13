@@ -1,0 +1,16 @@
+DROP TABLE users CASCADE;
+DROP TABLE tasks CASCADE;
+
+CREATE TABLE users(
+	userid INTEGER PRIMARY KEY,
+	password VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE tasks(
+	userid INTEGER,
+	taskid INTEGER PRIMARY KEY,
+	dscrp VARCHAR(40),
+	total INTEGER,
+	progress INTEGER
+);
+	

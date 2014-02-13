@@ -2,6 +2,7 @@
     require 'config.inc';
     require 'header.php';
 
+	session_save_path("sess");
     session_start();
     $errMessage = "";
     $email = "";

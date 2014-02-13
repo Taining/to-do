@@ -1,4 +1,5 @@
 DROP TABLE appuser CASCADE;
+DROP TABLE tasks CASCADE;
 
 CREATE TABLE appuser (
 	uid SERIAL,
@@ -8,6 +9,15 @@ CREATE TABLE appuser (
 	password VARCHAR(100),
 	sex integer,
 	PRIMARY KEY (uid)
+);
+
+CREATE TABLE tasks(
+	uid INTEGER REFERENCES appuser(uid),
+	taskid INTEGER,
+	dscrp VARCHAR(40),
+	total INTEGER,
+	progress INTEGER,
+	PRIMARY KEY (uid, taskid)
 );
 
 -- Adding a sample row to appuser TABLE

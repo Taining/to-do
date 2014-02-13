@@ -25,6 +25,40 @@
 	$sex = $row['sex'];
 	$password = $row['password'];
 
+	$EMPTY = "";
+	$inforMessage = $EMPTY;
+	$pwdMessage = $EMPTY;
+	if (isset($_POST['info'])) {
+		if ($_POST['email'] != $EMPTY && !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
+			$inforMessage = "Please enter a valid email.";
+		} else {
+			if ($_POST['email'] != $EMPTY) {
+				$email = $_POST['email'];
+			}
+			if ($_POST['fname'] != $EMPTY) {
+				$fname = $_POST['fname'];
+			}
+			if ($_POST['lname'] != $EMPTY) {
+				$lname = $_POST['lname'];
+			}
+			if ($sex != $_POST['sex']) {
+				$sex = $_POST['sex'];
+			}
+
+			$update_user_query = "UPDATE appuser SET (fname, lname, email, sex) = ($1, $2, $3, $4) WHERE uid = $5;";
+			$result = pg_prepare($dbconn, "update_user", $update_user_query);
+			$result = pg_execute($dbconn, "update_user", array($fname, $lname, $email, $sex, $_SESSION['user']));
+
+			$inforMessage = "Your information has been updated.";
+
+			//prevent resubmission
+			unset($_POST);
+		}
+	} else if (isset($_POST['pwd'])) {
+		
+	} else {
+		$inforMessage = $EMPTY;
+	}
 ?>
 
 <div class="content">
@@ -47,13 +81,16 @@
 				</tr>
 				<tr>
 					<td></td>
-                	<td><input type="submit" class="submit" value="Update Info" /></td>
-				</tr>	
+                	<td><input type="submit" class="submit" name="info" value="Update Info" /></td>
+				</tr>
+				<tr>	
+					<td colspan="2" class="error"><?php echo $inforMessage; ?></td>
+				</tr>		
 			</table>
 		</fieldset>
 	</form>
 
-	<form method="GET" class="form account-form" >
+	<form method="POST" class="form account-form" >
 		<fieldset>
 			<legend>Change Password</legend>
 			<table>
@@ -71,7 +108,7 @@
 				</tr>
 				<tr>
 					<td></td>
-                	<td><input type="submit" class="submit" value="Update Password" /></td>
+                	<td><input type="submit" class="submit" name="pwd" value="Update Password" /></td>
 				</tr>	
 			</table>	
 		</fieldset>

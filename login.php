@@ -2,6 +2,7 @@
     session_save_path("sess");
 	session_start();
     
+    $page = "login";
     require 'config.inc';
     require 'header.php';
     
@@ -23,15 +24,12 @@
             $result = pg_execute($dbconn, "select_user", array($email, $password));
             
             if(pg_num_rows($result)){
-                $_SESSION['authenticated'] = true;
                 $row = pg_fetch_array($result);
                 $_SESSION['user'] = $row['uid'];
                 header("Location: home.php");
             } else {
                 $errMessage = "Invalid user or password.";
             }
-        } else if(!isset($_SESSION['authenticated'])){
-            $_SESSION['authenticated'] = false;
         }
     }
 

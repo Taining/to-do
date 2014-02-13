@@ -13,11 +13,12 @@ CREATE TABLE appuser (
 
 CREATE TABLE tasks(
 	uid INTEGER REFERENCES appuser(uid),
-	taskid INTEGER,
-	dscrp VARCHAR(40),
+	taskid SERIAL,
+	title VARCHAR(40),
+	dscrp VARCHAR(255),
 	total INTEGER,
 	progress INTEGER,
-	PRIMARY KEY (uid, taskid)
+	PRIMARY KEY (taskid)
 );
 
 -- Adding a sample row to appuser TABLE

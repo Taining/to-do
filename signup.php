@@ -1,6 +1,8 @@
 <?php
-	require 'config.inc';
+    session_save_path("sess");
 	session_start();
+
+	require 'config.inc';
 	require 'header.php';
 
 	$fname = $lname = $email = $reemail = $password = $sex = "";

@@ -1,8 +1,20 @@
 <?php
+    session_save_path("sess");
+	session_start();
+	
 	$page = "home";
+	
+	if(isset($_SESSION['user'])) {
+		$userid = $_SESSION['user'];
+	} else {
+		header("Location: login.php");
+		exit;
+	}
+	
 	require "config.inc";
 	require "header.php";
-	$userid = 0;
+	
+
 	
 	$dbconn = pg_connect("host=127.0.0.1 port=5432 dbname=$db_name user=$db_user password=$db_password");
 	if(!$dbconn){

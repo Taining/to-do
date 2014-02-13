@@ -38,8 +38,16 @@
 		$lname = $_POST['lname'];
 
 		if ($validated) {
-			$insert_user_query = "INSERT INTO appuser (username, password, email) VALUES($1, $2, $3);";
+			$dbconn = pg_connect("host=localhost port=5432 dbname=$db_name user=$db_user password=$db_password");
+            if(!$dbconn){
+                $errMessage = "Connect to server failed";
+                exit;
+            } 
+			$insert_user_query = "INSERT INTO appuser (email, fname, lname, password) VALUES($1, $2, $3, $4);";
+			$result = pg_prepare($dbconn, "insert_user", $insert_user_query);
+			$result = pg_execute($dbconn, "insert_user", array($email, $fname, $lname, md5($password)));
 
+			header("Location: login.php");
 		}
 	}
 ?>

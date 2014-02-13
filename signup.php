@@ -1,13 +1,9 @@
 <?php
-<<<<<<< HEAD
+
 	session_save_path("sess");
 	session_start();
 	$page = "signup";
-=======
-    session_save_path("sess");
-	session_start();
 
->>>>>>> da4aff5269288e03b6b6ef75bbdc70691ecad6f7
 	require 'config.inc';
 	require 'header.php';
 

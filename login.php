@@ -35,7 +35,7 @@
 
 ?>  
     <form method = "POST">
-        <table class="login">
+        <table class="form">
             <tr>
                 <td colspan="2" class="error"><?php echo($errMessage); ?></td>
             </tr>

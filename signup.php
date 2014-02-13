@@ -1,6 +1,8 @@
 <?php
-	require 'config.inc';
+	session_save_path("sess");
 	session_start();
+	$page = "signup";
+	require 'config.inc';
 	require 'header.php';
 
 	$fname = $lname = $email = $reemail = $password = $sex = "";
@@ -64,7 +66,7 @@
 ?>
 	
 	<form method = "POST">
-        <table class="login" id="signup">
+        <table class="form" id="signup">
         	<tr>
         		<td colspan="3"><h2>Sign Up</h1></td>
         	</tr>

@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-	
 <?php
 	require "config.inc";
 	if(!isset($_REQUEST['dscrp']) || !(isset($_REQUEST['total']))) {

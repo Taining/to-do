@@ -52,7 +52,7 @@
 	}
 	
 	// display tasks
-	$query = "SELECT * FROM tasks WHERE uid=$userid ORDER BY taskid";
+	$query = "SELECT * FROM tasks WHERE uid=$userid ORDER BY ordering";
 	$result = pg_query($dbconn, $query);
 	if(!$result) {
 		echo("Cannot access database.");
@@ -109,6 +109,7 @@
 				</ul>
 			</div>
 			<p><a href="add-task.php">Add new task</a></p>
+			<p><a href="ordering.php">Order of displaying tasks</a></p>
 			
 			<?php 
 				echo("Rate: $rate<br>");

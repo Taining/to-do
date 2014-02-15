@@ -43,13 +43,15 @@
 										<li><a href="news.php">News</a></li>
 										<li id="current-page"><a href="contact.php">Contact</a></li>');
 									break;
-								case "account":
+								case "login":
+									break;
+								case "signup":
+									break;
+								default:
 									echo('<li><a href="home.php">Home</a></li>
 										<li><a href="news.php">News</a></li>
 										<li><a href="contact.php">Contact</a></li>');
 									break;
-								default:
-									break;	
 							}				
 						?>
 					</ul>

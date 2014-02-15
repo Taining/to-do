@@ -20,7 +20,7 @@ CREATE TABLE appuser (
 	sex INTEGER, -- 1 is female, 2 is male
 	password VARCHAR(100),
 	signupdate DATE,
-	done INTEGER, 	--number of task units that have been completed
+	done INTEGER, 	-- Number of task units that have been completed
 	PRIMARY KEY (uid)
 );
 
@@ -31,6 +31,7 @@ CREATE TABLE tasks(
 	details VARCHAR(1000),
 	total INTEGER,
 	progress INTEGER,
+	ordering INTEGER, -- Order of displaying
 	FOREIGN KEY (uid) REFERENCES appuser(uid)
 );
 	

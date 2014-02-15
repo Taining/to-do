@@ -25,7 +25,7 @@
 	$result=pg_query($dbconn, $query);
 	$row = pg_fetch_row($result);
 	$taskid = $row[0];
-	$query = "INSERT INTO tasks(uid, taskid, dscrp, details, total, progress) VALUES($userid, $taskid, '$_REQUEST[dscrp]', '$_REQUEST[details]', $_REQUEST[total], 0);";
+	$query = "INSERT INTO tasks(uid, taskid, dscrp, details, total, progress, ordering) VALUES($userid, $taskid, '$_REQUEST[dscrp]', '$_REQUEST[details]', $_REQUEST[total], 0, $taskid + 1);";
 	$result=pg_query($dbconn, $query);
 	if($result) {
 		echo('<META HTTP-EQUIV="Refresh" Content="0; URL=home.php">');

@@ -65,14 +65,14 @@
 				<ul>
 
 				<?php
-					while ($row = pg_fetch_row($result)) {
-						$taskid = $row[1];
-						$dscrp = $row[2];
-						$total = $row[3];
-						$progress = $row[4];
+					while ($row = pg_fetch_array($result)) {
+						$taskid = $row['taskid'];
+						$dscrp = $row['dscrp'];
+						$total = $row['total'];
+						$progress = $row['progress'];
 				?>
 					<li>
-						<?php echo($dscrp)?>
+						<?php echo("<a href='edit-task.php?taskid=$taskid'>$dscrp</a>")?>
 						<table border=1>
 						<tr>
 							<?php

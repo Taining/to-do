@@ -28,6 +28,7 @@ CREATE TABLE tasks(
 	uid INTEGER,
 	taskid INTEGER PRIMARY KEY,
 	dscrp VARCHAR(40),
+	details VARCHAR(1000),
 	total INTEGER,
 	progress INTEGER,
 	FOREIGN KEY (uid) REFERENCES appuser(uid)

@@ -6,12 +6,14 @@
 <html lang="en">
 	<head>
 <?php
-	
 	require "config.inc";
 	if(!isset($_REQUEST['dscrp']) || !(isset($_REQUEST['total']))) {
-		echo('<META HTTP-EQUIV="Refresh" Content="0; URL=add-task.php">');
+		header("Location: add-task.php");
 		exit;
-	} 
+	} else if ((trim($_REQUEST['dscrp']) == "") || (trim($_REQUEST['total']) == "")) {
+		header("Location: add-task.php?dscrp=$_REQUEST[dscrp]&total=$_REQUEST[total]&details=$_REQUEST[details]&error=1");
+		exit;
+	}
 	$userid = $_SESSION['user'];
 	//userid, task-dscrp, total-time, progress
 	$dbconn = pg_connect("host=127.0.0.1 port=5432 dbname=$db_name user=$db_user password=$db_password");
@@ -23,7 +25,7 @@
 	$result=pg_query($dbconn, $query);
 	$row = pg_fetch_row($result);
 	$taskid = $row[0];
-	$query = "INSERT INTO tasks(uid, taskid, dscrp, total, progress) VALUES($userid, $taskid, '$_REQUEST[dscrp]', $_REQUEST[total], 0);";
+	$query = "INSERT INTO tasks(uid, taskid, dscrp, details, total, progress) VALUES($userid, $taskid, '$_REQUEST[dscrp]', '$_REQUEST[details]', $_REQUEST[total], 0);";
 	$result=pg_query($dbconn, $query);
 	if($result) {
 		echo('<META HTTP-EQUIV="Refresh" Content="0; URL=home.php">');

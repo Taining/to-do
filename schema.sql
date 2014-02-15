@@ -2,9 +2,13 @@ DROP TABLE appuser CASCADE;
 DROP TABLE tasks CASCADE;
 
 /*
-CREATE TABLE users(
-	userid INTEGER PRIMARY KEY,
-	password VARCHAR(20) NOT NULL
+CREATE TABLE appuser (
+	uid SERIAL,
+	email VARCHAR(100),
+	fname VARCHAR(20),
+	lname VARCHAR(20),
+	password VARCHAR(100),
+	PRIMARY KEY (uid)
 );
 */
 
@@ -13,7 +17,10 @@ CREATE TABLE appuser (
 	email VARCHAR(100),
 	fname VARCHAR(20),
 	lname VARCHAR(20),
+	sex INTEGER, -- 1 is female, 2 is male
 	password VARCHAR(100),
+	signupdate DATE,
+	done INTEGER, 	--number of task units that have been completed
 	PRIMARY KEY (uid)
 );
 

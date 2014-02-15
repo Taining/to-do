@@ -1,13 +1,10 @@
 <?php
-
 	if (isset($_GET['action']) && $_GET['action'] == "logout") {
 		unset($_SESSION['user']);
 		header("Location: login.php");
 	}
-
 	$currentURL = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -20,10 +17,9 @@
 			<div class='header-container'>
 				<div id='utility'>
 					<a href="account.php">My account</a>
-					<a href="<?php echo $currentURL; ?>?action=logout">Log out</a>
+					<a href="<?php echo $currentURL;?>?action=logout">Log out</a>
 					<a href="">Help</a>
 				</div>
-				
 				<div id='title'>
 					<h1>To-do Manager</h1>
 				</div>
@@ -31,7 +27,6 @@
 				<nav>
 					<ul>
 						<?php
-    						
 							switch($page) {
 								case "home":
 									echo('<li id="current-page"><a href="home.php">Home</a></li>

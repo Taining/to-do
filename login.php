@@ -2,10 +2,8 @@
     session_save_path("sess");
 	session_start();
     
-    $page = "login";
     require 'config.inc';
-    require 'header.php';
-    
+    $page = "login";
     $errMessage = "";
     $email = "";
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -32,7 +30,8 @@
             }
         }
     }
-
+    
+    require 'header.php';
 ?>  
     <form method = "POST">
         <table class="form">

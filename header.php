@@ -16,9 +16,17 @@
 		<header>
 			<div class='header-container'>
 				<div id='utility'>
-					<a href="account.php">My account</a>
-					<a href="<?php echo $currentURL;?>?action=logout">Log out</a>
-					<a href="">Help</a>
+				<?php
+					switch($page) {
+						case "login":
+							break;
+						case "signup":
+							break;
+						default:
+							echo("<a href='account.php'>My account</a>
+									<a href='<?php echo $currentURL;?>?action=logout'>Log out</a>");
+					}
+				?>
 				</div>
 				<div id='title'>
 					<h1>To-do Manager</h1>

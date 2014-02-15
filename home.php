@@ -72,16 +72,24 @@
 						$progress = $row['progress'];
 				?>
 					<li>
-						<?php echo("<a href='edit-task.php?taskid=$taskid'>$dscrp</a>")?>
+						<?php echo("<a href='edit-task.php?taskid=$taskid'>$dscrp </a>
+									(<a href='delete-task.php?taskid=$taskid'>delete</a>)")?>
 						<table border=1>
 						<tr>
 							<?php
 								for($i = 0; $i < $total; $i++) {
-									if($i < $progress) {
+									if($i < $progress - 1) {
 										echo("<td>completed</td>");
-									} else if($i == $progress){
+									} else if ($i == $progress - 1) {
 										echo("<td>
-												<form action='makeProgress.php' method='post'>
+												<form action='undo.php' method='post'>
+													<input type='hidden' name='undo' value=$taskid>
+													<input type='submit' name='submit' value='Undo'>
+												</form>
+											  </td>");
+									} else if ($i == $progress){
+										echo("<td>
+												<form action='make-progress.php' method='post'>
 													<input type='hidden' name='makeProgress' value=$taskid>
 													<input type='submit' name='submit' value='To complete'>
 												</form>

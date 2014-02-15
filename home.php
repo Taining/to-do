@@ -20,29 +20,6 @@
 		exit;
 	}
 	
-	if (isset($_GET['makeProgress'])) {
-		$taskid = $_GET['makeProgress'];
-		$get_progress_query = "SELECT progress, uid FROM tasks WHERE taskid=$taskid";
-		$result = pg_query($dbconn, $get_progress_query);
-		$row = pg_fetch_row($result);
-		
-		// progress++
-		$progress = $row[0];
-		$progress += 1;
-		$update_query = "UPDATE tasks SET progress=$progress WHERE taskid=$taskid";
-		pg_query($dbconn, $update_query);
-		
-		// done++
-		$uid = $row[1];
-		$get_done_query = "SELECT done FROM appuser WHERE uid=$uid";
-		$result = pg_query($dbconn, $get_done_query);
-		$row = pg_fetch_row($result);
-		$done = $row[0];
-		$done += 1;
-		$update_query = "UPDATE appuser SET done=$done WHERE uid=$uid";
-		pg_query($dbconn, $update_query);
-	}
-	
 	// caculate rate
 	$query = "SELECT signupdate, done FROM appuser WHERE uid=$userid";
 	$result = pg_query($dbconn, $query);
@@ -104,7 +81,10 @@
 										echo("<td>completed</td>");
 									} else if($i == $progress){
 										echo("<td>
-												<a href='?makeProgress=$taskid'>to complete</a>
+												<form action='makeProgress.php' method='post'>
+													<input type='hidden' name='makeProgress' value=$taskid>
+													<input type='submit' name='submit' value='To complete'>
+												</form>
 											  </td>");
 									} else {
 										echo("<td>not completed</td>");

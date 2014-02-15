@@ -10,8 +10,9 @@
 		echo("Can't connect to the database");	
 		exit;
 	}
-	$query = "UPDATE tasks SET dscrp='$_REQUEST[dscrp]', details='$_REQUEST[details]', total=$_REQUEST[total] WHERE taskid=$_REQUEST[taskid]";
-	$result = pg_query($dbconn, $query);
+	$query = "UPDATE tasks SET dscrp=$1, details=$2, total=$3 WHERE taskid=$_REQUEST[taskid]";
+	$result = pg_prepare($dbconn, "my_query", $query);
+	$result = pg_execute($dbconn, "my_query", array($_REQUEST['dscrp'], $_REQUEST['details'], $_REQUEST['total']));
 	if($result) {
 		header("Location: home.php");
 	} else {

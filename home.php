@@ -52,7 +52,7 @@
 	}
 	
 	// display tasks
-	$query = "SELECT * FROM tasks WHERE uid=$userid ORDER BY ordering";
+	$query = "SELECT * FROM tasks WHERE uid=$userid AND progress<total ORDER BY ordering";
 	$result = pg_query($dbconn, $query);
 	if(!$result) {
 		echo("Cannot access database.");
@@ -60,7 +60,7 @@
 	}
 ?>
 		
-		<div id='content'>
+		<div id='content' class="container">
 			<div id='tasks'>
 				<ul>
 
@@ -79,23 +79,27 @@
 							<?php
 								for($i = 0; $i < $total; $i++) {
 									if($i < $progress - 1) {
-										echo("<td>completed</td>");
+										echo("<td><div class='cell'></div></td>");
 									} else if ($i == $progress - 1) {
 										echo("<td>
-												<form action='undo.php' method='post'>
-													<input type='hidden' name='undo' value=$taskid>
-													<input type='submit' name='submit' value='Undo'>
-												</form>
+												<div class='cell'>
+													<form action='undo.php' method='post'>
+														<input type='hidden' name='undo' value=$taskid>
+														<input type='submit' name='submit' value='Undo' class='btn'>
+													</form>
+												</div>
 											  </td>");
 									} else if ($i == $progress){
 										echo("<td>
-												<form action='make-progress.php' method='post'>
-													<input type='hidden' name='makeProgress' value=$taskid>
-													<input type='submit' name='submit' value='To complete'>
-												</form>
+												<div class='cell'>
+													<form action='make-progress.php' method='post'>
+														<input type='hidden' name='makeProgress' value=$taskid>
+														<input type='submit' name='submit' value='Do it!' class='btn'>
+													</form>
+												</div>
 											  </td>");
 									} else {
-										echo("<td>not completed</td>");
+										echo("<td><div class='cell'></div></td>");
 									}
 								}
 							?>
@@ -108,19 +112,24 @@
 				
 				</ul>
 			</div>
-			<p><a href="add-task.php">Add new task</a></p>
-			<p><a href="ordering.php">Order of displaying tasks</a></p>
 			
-			<?php 
-				echo("Rate: $rate<br>");
-				if(isset($remainingDays)) {
-					echo("Remaining: $remaining = $remainingDays days work"); 
-				} else {
-					echo("Remaining: $remaining");
-				}
-			?>
+			<div id="options">
+				<p><a href="add-task.php">Add new task</a></p>
+				<p><a href="ordering.php">Order of displaying tasks</a></p>
+			</div>
 			
-		</div>
+			<div id="data">
+				<?php 
+					echo("Rate: $rate<br>");
+					if(isset($remainingDays)) {
+						echo("Remaining: $remaining = $remainingDays days work"); 
+					} else {
+						echo("Remaining: $remaining");
+					}
+				?>
+			</div>
+			
+		</div> <!-- end of content -->
 		
 <?php
 	require "footer.php";

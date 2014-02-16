@@ -65,9 +65,9 @@
 
 /* account */
 
-h1 {
 
-}
+/* home */
+
 body {
 	background: #ededed;
 	font-family: 'Questrial', sans-serif;
@@ -150,10 +150,25 @@ nav #current-page a {
 	color:#751B05;
 	background: #ededed;
 }
-#tasks {
+.container {
 	padding:4em;
 	line-height:2em;
 }
 #content ul{
 	list-style-type: none;
+}
+
+#tasks table {
+	border-collapse: collapse;
+	border:1px solid black;
+	table-layout: fixed;
+}
+#tasks td, th {
+	height: 30px;
+	width: 30px;
+	overflow: hidden;
+}
+#tasks .btn {
+	border: 0;
+	color: red;
 }

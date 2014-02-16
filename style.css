@@ -151,19 +151,47 @@ nav #current-page a {
 	background: #ededed;
 }
 
-#tasks table {
+.tasks table {
 	border-collapse: collapse;
 	border:1px solid black;
 	table-layout: fixed;
 }
-#tasks td, th {
+.tasks td, th {
 	height: 40px;
 	width: 40px;
 	overflow: hidden;
 }
-#tasks .btn {
+.tasks .btn {
 	border: 0;
-	color: red;
+	color: white;
+}
+.tasks .completed {
+	background:#640202;
+}
+.tasks .last {
+	background:#CC6161;
+}
+.tasks .last .btn {
+	background:#CC6161;
+}
+.tasks .next {
+	background:white;
+}
+.tasks .next .btn{
+	background:white;
+	color:#CC6161;
+}
+.tasks .uncompleted {
+
+}
+.tasks li {
+	height: 100px;
+}
+.dscrp {
+	text-decoration:none;
+	font-size:1em;
+	font-weight:800;
+	color:#640202;
 }
 
 /* General */

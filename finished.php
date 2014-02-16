@@ -29,7 +29,7 @@
 ?>
 
 	<div class="container">
-		<div id='tasks'>
+		<div class='tasks'>
 			<ul>
 		
 			<?php

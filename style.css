@@ -150,13 +150,6 @@ nav #current-page a {
 	color:#751B05;
 	background: #ededed;
 }
-.container {
-	padding:4em;
-	line-height:2em;
-}
-#content ul{
-	list-style-type: none;
-}
 
 #tasks table {
 	border-collapse: collapse;
@@ -164,11 +157,22 @@ nav #current-page a {
 	table-layout: fixed;
 }
 #tasks td, th {
-	height: 30px;
-	width: 30px;
+	height: 40px;
+	width: 40px;
 	overflow: hidden;
 }
 #tasks .btn {
 	border: 0;
 	color: red;
+}
+
+/* General */
+
+ul {
+	list-style-type: none;
+}
+
+.container {
+	padding:4em;
+	line-height:2em;
 }

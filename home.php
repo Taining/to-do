@@ -51,6 +51,16 @@
 		$remainingDays = ceil($remaining / $rate);
 	}
 	
+	//mark a task as done
+	if (isset($_GET['action']) && $_GET['action']=="done") {
+		$task_info = pg_query($dbconn, "SELECT total FROM tasks WHERE uid=$userid AND taskid=$_GET[taskid]");
+		$row = pg_fetch_array($task_info);
+
+		$done_task_query = "UPDATE tasks SET (progress) = ($1) WHERE taskid = $2;";
+		$done_result = pg_prepare($dbconn, "done_task", $done_task_query);
+		$done_result = pg_execute($dbconn, "done_task", array($row['total'], $_GET['taskid']));
+	}
+
 	// display tasks
 	$query = "SELECT * FROM tasks WHERE uid=$userid AND progress<total ORDER BY ordering";
 	$result = pg_query($dbconn, $query);
@@ -73,7 +83,8 @@
 				?>
 					<li>
 						<?php echo("<a class='dscrp' href='edit-task.php?taskid=$taskid'>$dscrp </a>
-									(<a href='delete-task.php?taskid=$taskid'>remove</a>)")?>
+									(<a href='delete-task.php?taskid=$taskid'>remove</a>
+									<a href='home.php?action=done&taskid=$taskid'>done</a>)")?>
 						<table border=1>
 						<tr>
 							<?php

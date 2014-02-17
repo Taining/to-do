@@ -61,8 +61,21 @@
 		$done_result = pg_execute($dbconn, "done_task", array($row['total'], $_GET['taskid']));
 	}
 
-	// display tasks
-	$query = "SELECT * FROM tasks WHERE uid=$userid AND progress<total ORDER BY ordering";
+	//change sort methods
+	$query;
+	if (isset($_GET['sort'])) {
+		if ($_GET['sort']=="createdate") {
+			$query = "SELECT * FROM tasks WHERE uid=$userid AND progress<total ORDER BY createtime";
+		} elseif ($_GET['sort']=="priority") {
+			$query = "SELECT * FROM tasks WHERE uid=$userid AND progress<total ORDER BY priority";
+		} elseif ($_GET['sort']=="timeunit") {
+			$query = "SELECT * FROM tasks WHERE uid=$userid AND progress<total ORDER BY total";
+		}
+	} else {
+		// default sort method
+		$query = "SELECT * FROM tasks WHERE uid=$userid AND progress<total ORDER BY ordering";
+	}
+
 	$result = pg_query($dbconn, $query);
 	if(!$result) {
 		echo("Cannot access database.");
@@ -76,9 +89,9 @@
 					<!-- navagation to change sort methods -->	
 					<div>
 						Order by: 
-						<a href="#">Create Date</a>
-						<a href="#">Priority</a>
-						<a href="#">Time Units</a>
+						<a href="home.php?sort=createdate">Create Date</a>
+						<a href="home.php?sort=priority">Priority</a>
+						<a href="home.php?sort=timeunit">Time Units</a>
 					</div>
 				<?php
 					while ($row = pg_fetch_array($result)) {

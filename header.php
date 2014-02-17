@@ -24,7 +24,7 @@
 							break;
 						default:
 							echo("<a href='account.php'>My account</a>
-									<a href='<?php echo $currentURL;?>?action=logout'>Log out</a>");
+									<a href='$currentURL?action=logout'>Log out</a>");
 					}
 				?>
 				</div>

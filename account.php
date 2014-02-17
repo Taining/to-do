@@ -23,6 +23,12 @@
 	$lname = $row['lname'];
 	$email = $row['email'];
 	$sex = $row['sex'];
+	$birthday = explode("-", $row['birthday']);
+	$year = intval($birthday[0]);
+	$month = intval($birthday[1]);
+	$day = intval($birthday[2]);
+	$signupdate = $row['signupdate'];
+	$news = $row['news'];
 	$password = $row['password'];
 
 	$EMPTY = "";
@@ -44,20 +50,43 @@
 			if ($sex != $_POST['sex']) {
 				$sex = $_POST['sex'];
 			}
+			if ($_POST['news'] == 1) {
+				$news = 'true';
+			} else $news = 'false';
+			$birthday = $_POST['year']."-".$_POST['month']."-".$_POST['day'];
 
-			$update_user_query = "UPDATE appuser SET (fname, lname, email, sex) = ($1, $2, $3, $4) WHERE uid = $5;";
+			//update user info
+			$update_user_query = "UPDATE appuser SET (email, fname, lname, birthday, news, sex) = ($1, $2, $3, $4, $5, $6) WHERE uid = $7;";
 			$result = pg_prepare($dbconn, "update_user", $update_user_query);
-			$result = pg_execute($dbconn, "update_user", array($fname, $lname, $email, $sex, $_SESSION['user']));
+			$result = pg_execute($dbconn, "update_user", array($email, $fname, $lname, $birthday, $news, $sex, $_SESSION['user']));
 
-			$inforMessage = "Your information has been updated.";
+			if ($result) {
+				$inforMessage = "Your information has been updated.";
+			}
 
 			//prevent resubmission
 			unset($_POST);
 		}
 	} else if (isset($_POST['pwd'])) {
-		
+		if (md5($_POST['old-password']) != $password) {
+			echo md5($_POST['old-password']);
+			$pwdMessage = "Please enter correct old password.";
+		} elseif ($_POST['new-password'] == $EMPTY) {
+			$pwdMessage = "Please enter a new password.";
+		} elseif ($_POST['new-password'] != $_POST['re-password']) {
+			$pwdMessage = "New passwords do not match.";
+		} else {
+			$update_pwd_query = "UPDATE appuser SET (password) = ($1) WHERE uid = $2;";
+			$result = pg_prepare($dbconn, "update_pwd", $update_pwd_query);
+			$result = pg_execute($dbconn, "update_pwd", array(md5($_POST['new-password']), $_SESSION['user']));
+
+			if ($result) {
+				$pwdMessage = "Your password has been updated.";
+			}
+		}
 	} else {
 		$inforMessage = $EMPTY;
+		$pwdMessage = $EMPTY;
 	}
 ?>
 
@@ -66,6 +95,7 @@
 		<fieldset>
 			<legend>Account Information</legend>
 			<table>
+				<div class="error" <?php if($inforMessage=="") echo "hidden"; ?> ><?php echo $inforMessage; ?></div>
 				<tr>
 					<td><label>First Name: <input type="text" name="fname" size="14" placeholder="<?php echo $fname; ?>"></label></td>
 					<td><label>Last Name: <input type="text" name="lname" size="14" placeholder="<?php echo $lname; ?>"></label></td>
@@ -75,16 +105,50 @@
 				</tr>
 				<tr>
 					<td colspan="2">
+						Birthday:  
+						<select name="month">
+							<?php 
+							for ($i=1; $i < 13; $i++) { 
+								if ($month == $i) {
+									echo "<option value=$i selected=1>".date("M", mktime(0,0,0,$i,1,2014))."</option>";
+								} else echo "<option value=$i>".date("M", mktime(0,0,0,$i,1,2014))."</option>";
+							}
+							?>
+						</select>
+						<select name="day">
+							<?php 
+							for ($i=1; $i < 32; $i++) { 
+								if ($day == $i) {
+									echo "<option value=$i selected=1>$i</option>";
+								} else echo "<option value=$i>$i</option>";
+							}
+							?>
+						</select>
+						<select name="year">
+							<?php 
+							for ($i=1970; $i < 2015; $i++) { 
+								if ($year == $i) {
+									echo "<option value=$i selected=1>$i</option>";
+								} else echo "<option value=$i>$i</option>";
+							}
+							?>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
          			<label><input type="radio" name="sex" value="1" <?php if($sex==1) echo "checked";?> />Female &nbsp;&nbsp;</label>
          			<label><input type="radio" name="sex" value="2" <?php if($sex==2) echo "checked";?> />Male </label>
             	</td>
 				</tr>
 				<tr>
+					<td colspan="2">
+						<label><input type="checkbox" name="news" value="1" <?php if ($news) echo "checked"; ?>/>I'd like to recieve news from To-do Manager.</label>
+					</td>
+				</tr>
+				<tr>
 					<td></td>
                 	<td><input type="submit" class="submit" name="info" value="Update Info" /></td>
-				</tr>
-				<tr>	
-					<td colspan="2" class="error"><?php echo $inforMessage; ?></td>
 				</tr>		
 			</table>
 		</fieldset>
@@ -94,17 +158,18 @@
 		<fieldset>
 			<legend>Change Password</legend>
 			<table>
+				<div class="error" <?php if($pwdMessage=="") echo "hidden"; ?> ><?php echo $pwdMessage; ?></div>
 				<tr>
 					<td>Old Password: </td>
-					<td><input type="text" name="old-password" size="40"></td>
+					<td><input type="password" name="old-password" size="40"></td>
 				</tr>
 				<tr>
 					<td>New Password: </td>
-					<td><input type="text" name="new-password" size="40"></td>
+					<td><input type="password" name="new-password" size="40"></td>
 				</tr>
 				<tr>
 					<td>Confirm Password: </td>
-					<td><input type="text" name="re-password" size="40"></td>
+					<td><input type="password" name="re-password" size="40"></td>
 				</tr>
 				<tr>
 					<td></td>

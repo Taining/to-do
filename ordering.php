@@ -28,7 +28,11 @@
 	
 		header("Location: home.php");
 	}
+?>
 	
+	<div class=container>
+	
+<?php
 	$dbconn = pg_connect("host=127.0.0.1 port=5432 dbname=$db_name user=$db_user password=$db_password");
 	if(!$dbconn){
 		echo("Can't connect to the database");	
@@ -74,3 +78,5 @@
 			
 	require "footer.php";
 ?>
+
+	</div>

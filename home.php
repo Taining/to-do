@@ -73,7 +73,13 @@
 		<div id='content' class="container">
 			<div class='tasks'>
 				<ul>
-
+					<!-- navagation to change sort methods -->	
+					<div>
+						Order by: 
+						<a href="#">Create Date</a>
+						<a href="#">Priority</a>
+						<a href="#">Time Units</a>
+					</div>
 				<?php
 					while ($row = pg_fetch_array($result)) {
 						$taskid = $row['taskid'];

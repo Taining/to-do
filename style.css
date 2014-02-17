@@ -10,6 +10,10 @@ ul {
 	line-height:2em;
 }
 
+.center {
+	text-align:center;
+}
+
 /* login */
 
 .form {
@@ -226,6 +230,9 @@ nav #current-page a {
 	font-weight:800;
 	color:#640202;
 }
+.dscrp:hover {
+	color: #CC6161;
+}
 
 #container-col {
 	position: relative;
@@ -244,4 +251,22 @@ nav #current-page a {
 	height:200px;
 	position: absolute;
 	left: 520px;
+}
+
+/* edit-task */
+
+.aux {
+	float:right;
+}
+#go-back {
+	float:left;
+	background-color: #DA816C;
+    border-radius: 3px;
+    border: 1px solid #bdc7d8;
+    font-weight: bold;
+    height: 25px;
+}
+#go-back a {
+	color:black;
+	cursor: default;
 }

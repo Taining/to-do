@@ -144,7 +144,7 @@
 			<div id=container-col>
 				<div id="options">
 					<p><a href="add-task.php">Add new task</a></p>
-					<p><a href="ordering.php">Order of displaying tasks</a></p>
+					<p><a href="ordering.php">Define your own order of display</a></p>
 					<p><a href="finished.php">Finished tasks</a></p>
 				</div>
 			

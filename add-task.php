@@ -54,7 +54,6 @@
 	}
 	
 	if($error == 1) {
-		echo('<p>Please fill in all required fields.</p>');
 		$dscrp = $_REQUEST['dscrp'];
 		$details = $_REQUEST['details'];
 		$total = $_REQUEST['total'];
@@ -63,6 +62,11 @@
 	<form method="POST">
 		<table class="form" id="add-task">
 		<tr>
+		<?php
+			if($error == 1) {
+				echo("<tr id='error-add'><td class='error'>Please fill in all required fields.</td></tr>");
+			}
+		?>
 			<td><label>Task Description:<br><input type="text" name="dscrp" value=<?php echo($dscrp) ?> ></label></td>
 		</tr>
 		<tr>

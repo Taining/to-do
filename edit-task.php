@@ -3,6 +3,13 @@
 	session_start();
 	
 	function updateToDatabase($dbconn, $taskid, $dscrp, $details, $total) {
+		if ((trim($_REQUEST['dscrp']) == "") || (trim($_REQUEST['total']) == "")) {
+			$dscrp=$_REQUEST['dscrp'];
+			$total=$_REQUEST['total'];
+			$details=$_REQUEST['details'];
+			$error = 1;
+			return;
+		}
 		$query = "UPDATE tasks SET dscrp=$1, details=$2, total=$3 WHERE taskid=$4";
 		$result = pg_prepare($dbconn, "my_query", $query);
 		$result = pg_execute($dbconn, "my_query", array($dscrp, $details, $total, $taskid));
@@ -41,20 +48,28 @@
 		exit;
 	}
 	
+	$error = 0;
 	if(isset($_REQUEST['taskid']) && isset($_REQUEST['dscrp']) && isset($_REQUEST['details']) && isset($_REQUEST['total'])) {
 		updateToDatabase($dbconn, $_REQUEST['taskid'], $_REQUEST['dscrp'], $_REQUEST['details'], $_REQUEST['total']);
 	}
 	
-	// get task info
-	$query = "SELECT * FROM tasks WHERE taskid=$taskid";
-	$result = pg_query($dbconn, $query);
-	$row = pg_fetch_array($result);
-	$dscrp = $row['dscrp'];
-	$details = $row['details'];
-	$total = $row['total'];
+	if($error == 1) {
+		$dscrp = $_REQUEST['dscrp'];
+		$details = $_REQUEST['details'];
+		$total = $_REQUEST['total'];
+	} else {
+		// get task info
+		$query = "SELECT * FROM tasks WHERE taskid=$taskid";
+		$result = pg_query($dbconn, $query);
+		$row = pg_fetch_array($result);
+		$dscrp = $row['dscrp'];
+		$details = $row['details'];
+		$total = $row['total'];
+	}
 ?>
 
-	<form>
+<!--
+	<form class="form" id="edit-task">
 		<input type="hidden" name="taskid" value=<?php echo($taskid); ?> >
 		<label>Task Description:<br>
 			<input type="text" name="dscrp" value=<?php echo($dscrp); ?>>
@@ -72,4 +87,37 @@
 		<br>
 		<input type="submit" name="submit" value="Update task information">
 		<button><a href='home.php'>Go back</a></button>
+	</form>
+--!>
+	<form method="POST">
+		<table class="form" id="add-task">
+		<tr>
+		<?php
+			if($error == 1) {
+				echo("<tr id='error-add'><td class='error'>Please fill in all required fields.</td></tr>");
+			}
+		?>
+			<td><label>Task Description:<br><input type="text" name="dscrp" value=<?php echo($dscrp) ?> ></label></td>
+		</tr>
+		<tr>
+			<td><label>Details:<br><textarea name='details' cols=70 rows=6><?php echo($details) ?></textarea></label></td>
+		</tr>
+		<tr>
+			<td><label>Estimated total time (30mins as one unit):<br><input type="text" name="total" value=<?php echo($total) ?>></label></td>
+		</tr>
+		<tr>
+			<td>
+				Priority:
+				<select>
+					<option value="1">Low</option>
+					<option value="2" selected="1">Normal</option>
+					<option value="3">High</option>
+				</select>
+			</td>
+		</tr>
+		<tr class='aux'>
+			<td><button id="go-back"><a href='home.php'>Go back</a></button></td>
+			<td><input type="submit" name="submit" class="submit" value="Update"></td>
+		</tr>
+		</table>
 	</form>

@@ -8,7 +8,7 @@
 			$total=$_REQUEST['total'];
 			$details=$_REQUEST['details'];
 			$error = 1;
-			return;
+			return $error;
 		}
 		$query = "UPDATE tasks SET dscrp=$1, details=$2, total=$3 WHERE taskid=$4";
 		$result = pg_prepare($dbconn, "my_query", $query);
@@ -47,10 +47,10 @@
 		echo("Can't connect to the database");	
 		exit;
 	}
-	
+
 	$error = 0;
 	if(isset($_REQUEST['taskid']) && isset($_REQUEST['dscrp']) && isset($_REQUEST['details']) && isset($_REQUEST['total'])) {
-		updateToDatabase($dbconn, $_REQUEST['taskid'], $_REQUEST['dscrp'], $_REQUEST['details'], $_REQUEST['total']);
+		$error = updateToDatabase($dbconn, $_REQUEST['taskid'], $_REQUEST['dscrp'], $_REQUEST['details'], $_REQUEST['total']);
 	}
 	
 	if($error == 1) {

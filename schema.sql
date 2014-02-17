@@ -19,6 +19,8 @@ CREATE TABLE appuser (
 	lname VARCHAR(20),
 	sex INTEGER, -- 1 is female, 2 is male
 	password VARCHAR(100),
+	birthday DATE;
+	news boolean,
 	signupdate DATE,
 	done INTEGER, 	-- Number of task units that have been completed
 	PRIMARY KEY (uid)
@@ -32,6 +34,8 @@ CREATE TABLE tasks(
 	total INTEGER,
 	progress INTEGER,
 	ordering INTEGER, -- Order of displaying
+	createtime DATE,
+	--finishtime DATE, 
 	FOREIGN KEY (uid) REFERENCES appuser(uid)
 );
 	

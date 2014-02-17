@@ -60,11 +60,31 @@
 		$total = $_REQUEST['total'];
 	}
 ?>
-	<form>
-		<label>Task Description:<br><input type="text" name="dscrp" value=<?php echo($dscrp) ?> ></label><br>
-		<label>Details:<br><textarea name='details' cols=70 rows=6><?php echo($details) ?></textarea></label><br>
-		<label>Estimated total time (30mins as one unit):<br><input type="text" name="total" value=<?php echo($total) ?>></label><br>
-		<input type="submit" name="submit" value="Add task">
+	<form method="POST">
+		<table class="form" id="add-task">
+		<tr>
+			<td><label>Task Description:<br><input type="text" name="dscrp" value=<?php echo($dscrp) ?> ></label></td>
+		</tr>
+		<tr>
+			<td><label>Details:<br><textarea name='details' cols=70 rows=6><?php echo($details) ?></textarea></label></td>
+		</tr>
+		<tr>
+			<td><label>Estimated total time (30mins as one unit):<br><input type="text" name="total" value=<?php echo($total) ?>></label></td>
+		</tr>
+		<tr>
+			<td>
+				Priority:
+				<select>
+					<option value="1">Low</option>
+					<option value="2" selected="1">Normal</option>
+					<option value="3">High</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td><input type="submit" name="submit" class="submit" value="Add task"></td>
+		</tr>
+		</table>
 	</form>
 <?php
 	require "footer.php";

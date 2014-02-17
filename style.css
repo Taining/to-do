@@ -1,4 +1,17 @@
+/* General */
+
+ul {
+	list-style-type: none;
+}
+
+.container {
+	position: relative;
+	padding:4em;
+	line-height:2em;
+}
+
 /* login */
+
 .form {
     margin: 35px auto;
 }
@@ -194,13 +207,26 @@ nav #current-page a {
 	color:#640202;
 }
 
-/* General */
-
-ul {
-	list-style-type: none;
+#container-col {
+	position: relative;
+}
+#options {
+	border: 4px solid #CC6161;
+	width: 400px;
+	height: 200px;
+	position: absolute;
+	left: 40px;
+}
+#info {
+	border: 4px solid #CC6161;
+	width: 400px;
+	height:200px;
+	position: absolute;
+	left: 520px;
 }
 
-.container {
-	padding:4em;
-	line-height:2em;
+/* footer */
+
+footer {
+	top: 1000px;
 }

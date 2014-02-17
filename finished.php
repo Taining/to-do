@@ -81,3 +81,5 @@
 			</ul>
 		</div>
 	</div> <!-- end of content -->
+	
+	<?php require "footer.php"; ?>

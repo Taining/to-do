@@ -107,23 +107,32 @@
 				?>
 				
 				</ul>
-			</div>
+			</div> <!-- end of tasks -->
 			
-			<div id="options">
-				<p><a href="add-task.php">Add new task</a></p>
-				<p><a href="ordering.php">Order of displaying tasks</a></p>
-				<p><a href="finished.php">Finished tasks</a></p>
-			</div>
+			<div id=container-col>
+				<div id="options">
+					<p><a href="add-task.php">Add new task</a></p>
+					<p><a href="ordering.php">Order of displaying tasks</a></p>
+					<p><a href="finished.php">Finished tasks</a></p>
+				</div>
 			
-			<div id="data">
-				<?php 
-					echo("Rate: $rate<br>");
-					if(isset($remainingDays)) {
-						echo("Remaining: $remaining = $remainingDays days work"); 
-					} else {
-						echo("Remaining: $remaining");
-					}
-				?>
+				<div id="info">
+					<div id="data">
+					<?php 
+						echo("Rate: $rate<br>");
+						if(isset($remainingDays)) {
+							echo("Remaining: $remaining = $remainingDays days work"); 
+						} else {
+							echo("Remaining: $remaining");
+						}
+					?>
+					</div>
+					<div id="instr">
+						<br>Click on "Do it!" to make progress
+						<br>Click on "Undo" to make the last unit as undone
+						<br>Click on task title to see task detail
+					</div>
+				</div>
 			</div>
 			
 		</div> <!-- end of content -->

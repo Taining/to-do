@@ -72,8 +72,8 @@
         		<td colspan="3"><h2>Sign Up</h1></td>
         	</tr>
         	<tr>
-        		<td>
-        			<div class="error"><?php echo $errMessage; ?></div>
+        		<td colspan="3">
+        			<div class="error" <?php if($errMessage=="") echo "hidden"; ?> ><?php echo $errMessage; ?></div>
         		</td>
         	</tr>
             <tr>

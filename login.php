@@ -36,7 +36,7 @@
     <form method = "POST">
         <table class="form">
             <tr>
-                <td colspan="2" class="error"><?php echo($errMessage); ?></td>
+                <td colspan="2"><div class="error" <?php if($errMessage=="") echo "hidden"; ?> ><?php echo($errMessage); ?></div></td>
             </tr>
             <tr>
                 <td>Email: </td>

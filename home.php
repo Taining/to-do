@@ -80,11 +80,13 @@
 						$dscrp = $row['dscrp'];
 						$total = $row['total'];
 						$progress = $row['progress'];
+						$createtime = $row['createtime'];
 				?>
 					<li>
 						<?php echo("<a class='dscrp' href='edit-task.php?taskid=$taskid'>$dscrp </a>
 									(<a href='delete-task.php?taskid=$taskid'>remove</a>
-									<a href='home.php?action=done&taskid=$taskid'>done</a>)")?>
+									<a href='home.php?action=done&taskid=$taskid'>done</a>) 
+									<code>Created at $createtime</code>")?>
 						<table border=1>
 						<tr>
 							<?php

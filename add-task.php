@@ -33,9 +33,9 @@
 		$row = pg_fetch_row($result);
 		$ordering = $row[0] + 1;
 		
-		$query = "INSERT INTO tasks(uid, taskid, dscrp, details, total, progress, ordering) VALUES($userid, $taskid, $1, $2, $3, 0, $ordering)";
+		$query = "INSERT INTO tasks(uid, taskid, dscrp, details, total, progress, ordering, createtime) VALUES($userid, $taskid, $1, $2, $3, 0, $ordering, $4)";
 		$result = pg_prepare($dbconn, "my_query", $query);
-		$result = pg_execute($dbconn, "my_query", array($dscrp, $details, $total));
+		$result = pg_execute($dbconn, "my_query", array($dscrp, $details, $total, date("Y-m-d")));
 		if($result) {
 			header("Location: home.php");
 		} else {

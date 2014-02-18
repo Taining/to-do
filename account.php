@@ -91,6 +91,7 @@
 ?>
 
 <div class="container">
+	<h2>My Account</h2>
 	<form method="POST" class="form account-form">
 		<fieldset>
 			<legend>Account Information</legend>

@@ -34,7 +34,7 @@
 	$signup = strtotime(date("M d Y", strtotime($signupdate)));
 	$cur = strtotime(date("M d Y"));
 	$dateDiff = ($cur - $signup)/3600/24;
-	$rate = $done / $dateDiff;
+	$rate = intval($done / $dateDiff);
 	
 	// caculate remaining days
 	$query = "SELECT SUM(total), SUM(progress) FROM tasks WHERE uid=$userid";
@@ -138,6 +138,10 @@
 										echo("<td class='uncompleted'></td>");
 									}
 								}
+
+								//print how many percent of this task has been done
+								$percent = intval($progress/$total*100);
+								echo ("<td class='task-progress'>$percent%</td>");
 							?>
 						</tr>
 						</table>

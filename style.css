@@ -125,6 +125,9 @@ footer p {
 	font-weight: 300;
 	font-size: 0.8em;
 }
+table {
+	border: none;
+}
 nav {
 	height: 60px;
 }
@@ -193,10 +196,11 @@ nav #current-page a {
 
 .tasks table {
 	border-collapse: collapse;
-	border:1px solid black;
+	/*border:1px solid black;*/
 	table-layout: fixed;
 }
 .tasks td, th {
+	border:1px solid black;
 	height: 40px;
 	width: 40px;
 	overflow: hidden;
@@ -223,6 +227,11 @@ nav #current-page a {
 }
 .tasks .uncompleted {
 
+}
+.tasks td.task-progress {
+	border-style: none;
+	color: green;
+	text-align: right;
 }
 .tasks li {
 	height: 100px;

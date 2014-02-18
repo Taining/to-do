@@ -5,7 +5,7 @@
 	$page = "edit-task";
 
 	function updateToDatabase($dbconn, $taskid, $dscrp, $details, $total, $priority) {
-		$query = "UPDATE tasks SET dscrp=$1, details=$2, total=$3 priority=$4 WHERE taskid=$5";
+		$query = "UPDATE tasks SET dscrp=$1, details=$2, total=$3, priority=$4 WHERE taskid=$5";
 		$result = pg_prepare($dbconn, "my_query", $query);
 		$result = pg_execute($dbconn, "my_query", array($dscrp, $details, $total, $priority, $taskid));
 		if($result) {

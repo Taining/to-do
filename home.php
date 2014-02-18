@@ -2,6 +2,11 @@
     session_save_path("sess");
 	session_start();
 	
+	if(!isset($_SESSION['postback'])) {
+		$postback=mt_rand();
+		$_SESSION['postback']=$postback;
+	}
+	
 	$page = "home";
 	
 	if (isset($_SESSION['user'])) {
@@ -63,10 +68,14 @@
 			$done_task_query = "UPDATE tasks SET (progress) = ($1) WHERE taskid = $2;";
 			$done_result = pg_prepare($dbconn, "done_task", $done_task_query);
 			$done_result = pg_execute($dbconn, "done_task", array($row['total'], $_GET['taskid']));
-		} elseif ($_GET['action']=="remove" && $_GET['uid'] == $_SESSION['user']) {
+		} elseif ($_GET['action']=="remove" && $_GET['uid'] == $_SESSION['user'] && $_GET['postback'] == $_SESSION['postback']) {
 			$delete_task_query = "DELETE FROM tasks WHERE taskid=$1;";
 			$delete_result = pg_prepare($dbconn, "delete_task", $delete_task_query);
 			$delete_result = pg_execute($dbconn, "delete_task", array($_GET['taskid']));
+			$_SESSION['postback'] = mt_rand();
+		} elseif ($_GET['postback'] != $_SESSION['postback']) {
+			header("Location: home.php");
+			exit;
 		}
 	}
 
@@ -112,7 +121,7 @@
 				?>
 					<li>
 						<?php echo("<a class='dscrp' href='edit-task.php?taskid=$taskid&uid=$userid'>$dscrp</a>"); ?>
-						<?php echo ("(<a href='home.php?action=remove&taskid=$taskid&uid=$userid'>remove</a>"); ?>			
+						<?php echo ("(<a href='home.php?action=remove&taskid=$taskid&uid=$userid&postback=$_SESSION[postback]'>remove</a>"); ?>			
 						<?php echo ("<a href='home.php?action=done&taskid=$taskid&uid=$userid'>done</a>)"); ?>	 
 						<?php echo ("<code>Created at $createtime</code>"); ?>
 						

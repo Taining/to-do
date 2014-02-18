@@ -44,7 +44,7 @@
 		exit;
 	}
 	
-	$query = "SELECT taskid, dscrp, ordering FROM tasks WHERE uid=$_SESSION[user] ORDER BY ordering";
+	$query = "SELECT taskid, dscrp, ordering FROM tasks WHERE uid=$_SESSION[user] AND progress < total ORDER BY ordering";
 	$result = pg_query($dbconn, $query);
 	if(!$result) {
 		echo("Cannot access database.");

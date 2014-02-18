@@ -90,7 +90,7 @@
 	}
 ?>
 
-<div class="content">
+<div class="container">
 	<form method="POST" class="form account-form">
 		<fieldset>
 			<legend>Account Information</legend>
@@ -126,7 +126,7 @@
 						</select>
 						<select name="year">
 							<?php 
-							for ($i=1970; $i < 2015; $i++) { 
+							for ($i=2014; $i > 1904; $i--) { 
 								if ($year == $i) {
 									echo "<option value=$i selected=1>$i</option>";
 								} else echo "<option value=$i>$i</option>";

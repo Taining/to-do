@@ -7,14 +7,7 @@
 	require "config.inc";
 	require "header.php";
 	
-	function addToDatabase(&$dscrp, &$details, &$total, &$error, $db_name, $db_user, $db_password, $priority) {
-		if ((trim($_REQUEST['dscrp']) == "") || (trim($_REQUEST['total']) == "")) {
-			$dscrp=$_REQUEST['dscrp'];
-			$total=$_REQUEST['total'];
-			$details=$_REQUEST['details'];
-			$error = 1;
-			return;
-		}
+	function addToDatabase(&$dscrp, &$details, &$total, $db_name, $db_user, $db_password, $priority) {
 		$userid = $_SESSION['user'];
 		//userid, task-dscrp, total-time, progress
 		$dbconn = pg_connect("host=127.0.0.1 port=5432 dbname=$db_name user=$db_user password=$db_password");
@@ -47,16 +40,22 @@
 	$dscrp = "";
 	$details = "";
 	$total = "";
-	$error = 0;
+	$errMessage = "";
 	
-	if(isset($_REQUEST['dscrp']) && isset($_REQUEST['total'])) {
-		addToDatabase($_REQUEST['dscrp'], $_REQUEST['details'], $_REQUEST['total'], $error, $db_name, $db_user, $db_password, $_REQUEST['priority']);
-	}
-	
-	if($error == 1) {
-		$dscrp = $_REQUEST['dscrp'];
-		$details = $_REQUEST['details'];
-		$total = $_REQUEST['total'];
+	if (isset($_REQUEST['submit'])) {
+		if($_REQUEST['dscrp'] == "" || $_REQUEST['total'] == "") {
+			$errMessage = "Please fill in all required fields.";
+		} elseif (!is_numeric($_REQUEST['total'])) {
+			$errMessage = "Please enter a numeric time units.";
+		} else {
+			addToDatabase($_REQUEST['dscrp'], $_REQUEST['details'], $_REQUEST['total'], $db_name, $db_user, $db_password, $_REQUEST['priority']);
+		}
+
+		if($errMessage != "") {
+			$dscrp = $_REQUEST['dscrp'];
+			$details = $_REQUEST['details'];
+			$total = $_REQUEST['total'];
+		}	
 	}
 ?>
 
@@ -64,11 +63,9 @@
 	<form method="POST">
 		<table class="form" id="add-task">
 		<tr>
-		<?php
-			if($error == 1) {
-				echo("<tr id='error-add'><td class='error'>Please fill in all required fields.</td></tr>");
-			}
-		?>
+			<td><div class="error" <?php if($errMessage=="") echo "hidden"; ?> ><?php echo $errMessage; ?></div></td>
+		</tr>
+		<tr>
 			<td><label>Task Description:<br><input type="text" name="dscrp" value=<?php echo($dscrp) ?> ></label></td>
 		</tr>
 		<tr>

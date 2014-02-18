@@ -6,7 +6,7 @@
 	require 'config.inc';
 	require 'header.php';
 
-	$fname = $lname = $email = $reemail = $password = $sex = $news = $year = $month = $day = "";
+	$fname = $lname = $email = $reemail = $password = $sex = $news = $year = $month = $day = $policy = "";
 	$EMPTY = "";
 	$validated = true;
 	$errMessage = $EMPTY;
@@ -38,7 +38,7 @@
 		$month = $_POST['month'];
 		$day = $_POST['day'];
         $password = $_POST['password'];
-        
+
 		if (isset($_POST['news']) && $_POST['news']==1) {
 			$news = 'true';
 		} else $news = 'false';
@@ -145,7 +145,7 @@
             </tr>
             <tr>
             	<td colspan="2">
-            		<label><input type="checkbox" name="policy" value="1"/>I've read and agree to the Terms and Conditions.</label>
+            		<label><input type="checkbox" name="policy" value="1" <?php if($policy!=$EMPTY) echo "CHECKED"; ?>/>I've read and agree to the Terms and Conditions.</label>
             	</td>
             </tr>
             <tr>

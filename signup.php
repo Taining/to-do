@@ -99,33 +99,38 @@
             		<span>
             			Birthday: 
             			<select name="month">
-            				<option value="0" selected="1">Month</option>
-                            <option value="1">Jan</option>
-            				<option value="2">Feb</option>
-            				<option value="3">Mar</option>
-            				<option value="4">Apr</option>
-            				<option value="5">May</option>
-            				<option value="6">Jun</option>
-            				<option value="7">Jul</option>
-            				<option value="8">Aug</option>
-            				<option value="9">Sep</option>
-            				<option value="10">Oct</option>
-            				<option value="11">Nov</option>
-            				<option value="12">Dec</option>
+                            <?php 
+                            if ($month == $EMPTY) {
+                                    echo "<option value='0' selected='1'>Month</option>";
+                            }
+                            for ($i=1; $i < 13; $i++) {
+                                if ($month == $i) {
+                                    echo "<option value=$i selected=1>".date("M", mktime(0,0,0,$i,1,2014))."</option>";
+                                } else echo "<option value=$i>".date("M", mktime(0,0,0,$i,1,2014))."</option>";
+                            }
+                            ?>
             			</select>
             			<select name="day">
-            				<option value="0" selected="1">Day</option>
                             <?php
+                                if ($day == $EMPTY) {
+                                    echo "<option value='0' selected='1'>Day</option>";
+                                }
                                 for ($i=1; $i < 32; $i++) {
-                                    echo "<option value=$i>$i</option>";
+                                    if ($day == $i) {
+                                        echo "<option value=$i selected=1>$i</option>";
+                                    } else echo "<option value=$i>$i</option>";
                                 }
                             ?>
             			</select>
             			<select name="year">
-            				<option value="0" selected="1">Year</option>
             				<?php
+                                if ($year == $EMPTY) {
+                                    echo "<option value='0' selected='1'>Year</option>";
+                                }
                                 for ($i=2014; $i > 1904; $i--) { 
-                                    echo "<option value=$i>$i</option>";
+                                    if ($year == $i) {
+                                        echo "<option value=$i selected=1>$i</option>";
+                                    } else echo "<option value=$i>$i</option>";
                                 }
                             ?>
             			</select>

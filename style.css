@@ -194,6 +194,21 @@ nav #current-page a {
 	background: #ededed;
 }
 
+#orderby {
+	float:right;
+	margin: 0 60px;
+}
+#orderby a {
+	padding: 0 0.3em;
+	text-decoration: none;
+}
+.link a {
+	color: #CC6161;
+}
+.link a:hover {
+	color: #F6AFAF
+}
+
 .tasks table {
 	border-collapse: collapse;
 	/*border:1px solid black;*/
@@ -230,7 +245,7 @@ nav #current-page a {
 }
 .tasks td.task-progress {
 	border-style: none;
-	color: green;
+	color: #BF3030;
 	text-align: right;
 }
 .tasks li {
@@ -248,7 +263,8 @@ nav #current-page a {
 
 #container-col {
 	position: relative;
-	height: 200px;
+	top:20px;
+	height: 240px;
 	padding: 1 0 2em 0;
 }
 .small-container {
@@ -277,11 +293,17 @@ nav #current-page a {
 }
 #info {
 	border: 4px solid #CC6161;
-	width: 400px;
+	width: 340px;
 	height:200px;
 	position: absolute;
 	left: 520px;
 	border-radius: 15px;
+}
+
+#instr {
+	font-size: 80%;
+	line-height: 2em;
+	padding: 1em 0 0 0;
 }
 
 .highlight {

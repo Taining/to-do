@@ -41,8 +41,8 @@
 					$progress = $row['progress'];
 			?>
 				<li>
-					<?php echo("<a href='edit-task.php?taskid=$taskid'>$dscrp </a>
-								(<a href='delete-task.php?taskid=$taskid'>delete</a>)")?>
+					<?php echo("<a class='dscrp' href='edit-task.php?taskid=$taskid'>$dscrp </a>
+								(<a href='delete-task.php?taskid=$taskid'>remove</a>)")?>
 					<table border=1>
 					<tr>
 						<?php

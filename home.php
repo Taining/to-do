@@ -80,17 +80,23 @@
 	}
 
 	//change sort methods
+	if(!isset($_SESSION['sort'])) {
+		$_SESSION['sort'] = 'none';
+	}
 	$query;
 	if (isset($_GET['sort'])) {
 		if ($_GET['sort']=="createdate") {
-			$query = "SELECT * FROM tasks WHERE uid=$userid AND progress<total ORDER BY createtime";
+			$query = "SELECT * FROM tasks WHERE uid=$userid AND progress<total ORDER BY createtime, dscrp";
+			$_SESSION['sort'] = "createtime";
 		} elseif ($_GET['sort']=="priority") {
-			$query = "SELECT * FROM tasks WHERE uid=$userid AND progress<total ORDER BY priority";
+			$query = "SELECT * FROM tasks WHERE uid=$userid AND progress<total ORDER BY priority, dscrp";
+			$_SESSION['sort'] = "priority";
 		} elseif ($_GET['sort']=="timeunit") {
-			$query = "SELECT * FROM tasks WHERE uid=$userid AND progress<total ORDER BY total";
+			$query = "SELECT * FROM tasks WHERE uid=$userid AND progress<total ORDER BY total, dscrp";
+			$_SESSION['sort'] = "timeunit";
 		}
 	} else {
-		// default sort method
+		// default sort method (by create time) or customized ordering
 		$query = "SELECT * FROM tasks WHERE uid=$userid AND progress<total ORDER BY ordering";
 	}
 
@@ -102,15 +108,17 @@
 ?>
 		
 		<div id='content' class="container">
+			<!-- navagation to change sort methods -->	
+			<div id='orderby' class='link'>
+				Order by: 
+				<a href="home.php?sort=createdate">Create Date</a>
+				<a href="home.php?sort=priority">Priority</a>
+				<a href="home.php?sort=timeunit">Time Units</a>
+			</div>
+			
 			<div class='tasks'>
 				<ul>
-					<!-- navagation to change sort methods -->	
-					<div>
-						Order by: 
-						<a href="home.php?sort=createdate">Create Date</a>
-						<a href="home.php?sort=priority">Priority</a>
-						<a href="home.php?sort=timeunit">Time Units</a>
-					</div>
+
 				<?php
 					while ($row = pg_fetch_array($result)) {
 						$taskid = $row['taskid'];
@@ -121,10 +129,11 @@
 				?>
 					<li>
 						<?php echo("<a class='dscrp' href='edit-task.php?taskid=$taskid&uid=$userid'>$dscrp</a>"); ?>
+						<span class='link'>
 						<?php echo ("(<a href='home.php?action=remove&taskid=$taskid&uid=$userid&postback=$_SESSION[postback]'>remove</a>"); ?>			
 						<?php echo ("<a href='home.php?action=done&taskid=$taskid&uid=$userid'>done</a>)"); ?>	 
+						</span>
 						<?php echo ("<code>Created at $createtime</code>"); ?>
-						
 						<table border=1>
 						<tr>
 							<?php
@@ -186,9 +195,11 @@
 					?>
 					</div>
 					<div id="instr">
-						<br>Click on "<span class='highlight-less'>Do it!</span>" to make progress
-						<br>Click on "<span class='highlight-less'>Undo</span>" to make the last unit as undone
-						<br>Click on task title to see task detail
+						Click on "<span class='highlight-less'>Do it!</span>" to make progress<br>
+						Click on "<span class='highlight-less'>Undo</span>" to make the last unit as undone<br>
+						Click on task title to see task detail<br>
+						Click on 'remove' to remove task<br>
+						Click on 'done' to mark task as done
 					</div>
 				</div>
 			</div>

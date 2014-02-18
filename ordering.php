@@ -25,7 +25,8 @@
 			$query = "UPDATE tasks SET ordering=$order WHERE taskid = $taskid";
 			pg_query($dbconn, $query);
 		}
-	
+		
+		$_SESSION['sort'] = "none";
 		header("Location: home.php");
 	}
 ?>
@@ -44,7 +45,21 @@
 		exit;
 	}
 	
-	$query = "SELECT taskid, dscrp, ordering FROM tasks WHERE uid=$_SESSION[user] AND progress < total ORDER BY ordering";
+	$query = "";
+	switch ($_SESSION['sort']) {
+		case "none":
+			$query = "SELECT taskid, dscrp, ordering FROM tasks WHERE uid=$_SESSION[user] AND progress < total ORDER BY ordering";
+			break;
+		case "createtime":
+			$query = "SELECT taskid, dscrp, ordering FROM tasks WHERE uid=$_SESSION[user] AND progress < total ORDER BY createtime, dscrp";
+			break;	
+		case "priority":
+			$query = "SELECT taskid, dscrp, ordering FROM tasks WHERE uid=$_SESSION[user] AND progress < total ORDER BY priority, dscrp";
+			break;	
+		case "timeunit":
+			$query = "SELECT taskid, dscrp, ordering FROM tasks WHERE uid=$_SESSION[user] AND progress < total ORDER BY total, dscrp";
+			break;
+	}
 	$result = pg_query($dbconn, $query);
 	if(!$result) {
 		echo("Cannot access database.");
@@ -59,17 +74,19 @@
 	
 	echo("<form method='post'>");
 	
+	$line = 1;
 	while ($row = pg_fetch_array($result)) {
 		echo("<label>$row[dscrp]:
 					<select name=$row[taskid]>");
 		for($i = 1; $i <= $numOfTasks; $i++) {
-			if($i == $row['ordering']) {
+			if($i == $line) {
 				echo("<option selected='selected'>$i</option>");
 			} else {
 				echo("<option>$i</option>");
 			}
 		}
 		echo("</select></label><br>");
+		$line++;
 	}
 	
 	echo("<input type='hidden' name='numOfTasks' value=$numOfTasks>");

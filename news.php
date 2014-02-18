@@ -25,7 +25,7 @@
 			<h2>News</h2>
 			<ol>";
 	while ($row = pg_fetch_array($result)) {
-		echo "<li>User <font color='red'>$row[fname]</font> added task <font color='green'>$row[dscrp]</font> on <code>$row[createtime]</code>.</li>";
+		echo "<li>User <font color='#F94C4C'>$row[fname]</font> added task <font color='#F94C4C'>$row[dscrp]</font> on <code>$row[createtime]</code>.</li>";
 	}
 	echo "</ol></div>";
 

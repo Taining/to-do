@@ -78,13 +78,13 @@
 			<td><div class="error" <?php if($errMessage=="") echo "hidden"; ?> ><?php echo $errMessage; ?></div></td>
 		</tr>
 		<tr>
-			<td><label>Task Description:<br><input type="text" name="dscrp" value=<?php echo($dscrp) ?> ></label></td>
+			<td><label>Task Description:<br><input type="text" name="dscrp" value=<?php echo($dscrp); ?> ></label></td>
 		</tr>
 		<tr>
-			<td><label>Details:<br><textarea name='details' cols=70 rows=6><?php echo($details) ?></textarea></label></td>
+			<td><label>Details:<br><textarea name='details' cols=70 rows=6><?php echo($details); ?></textarea></label></td>
 		</tr>
 		<tr>
-			<td><label>Estimated total time (30mins as one unit):<br><input type="text" name="total" value=<?php echo($total) ?>></label></td>
+			<td><label>Estimated total time (30mins as one unit):<br><input type="text" name="total" value=<?php echo($total); ?>></label></td>
 		</tr>
 		<tr>
 			<td>

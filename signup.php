@@ -18,12 +18,12 @@
 			$errMessage = "Please enter your email.";
 		} else if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
 			$errMessage = "Please enter a valid email.";
-		} else if ($_POST['re-email'] == $EMPTY || $_POST['re-email'] != $_POST['email']) {
-			$errMessage = "Your emails do not match.";
-			$_POST['re-email'] = $EMPTY;
 		} else if ($_POST['password'] == $EMPTY) {
 			$errMessage = "Please enter your password.";
-		} else if (!checkdate($_POST['month'], $_POST['day'], $_POST['year'])) {
+		} else if ($_POST['re-password'] == $EMPTY || $_POST['re-password'] != $_POST['password']) {
+            $errMessage = "Your passwords do not match.";
+            $_POST['re-password'] = $EMPTY;
+        } else if (!checkdate($_POST['month'], $_POST['day'], $_POST['year'])) {
 			$errMessage = "Please enter a valid date.";
 		} else if (!isset($_POST['sex'])) {
 			$errMessage = "Please select your gender.";
@@ -34,11 +34,11 @@
 		$fname = $_POST['fname'];
 		$lname = $_POST['lname'];
 		$email = $_POST['email'];
-		$reemail = $_POST['re-email'];
 		$year = $_POST['year'];
 		$month = $_POST['month'];
 		$day = $_POST['day'];
-
+        $password = $_POST['password'];
+        
 		if (isset($_POST['news']) && $_POST['news']==1) {
 			$news = 'true';
 		} else $news = 'false';
@@ -89,10 +89,10 @@
                 <td colspan="2"><input type="text" name="email" value="<?php echo $email; ?>" placeholder="Your Email" size="56" /></td>
             </tr>
             <tr>
-                <td colspan="2"><input type="text" name="re-email" value="<?php echo $reemail; ?>" placeholder="Re-enter Email" size = "56" /></td>
+                <td colspan="2"><input type="password" name="password" placeholder="New Password" size = "56" /></td>
             </tr>
             <tr>
-                <td colspan="2"><input type="password" name="password" placeholder="New Password" size = "56" /></td>
+                <td colspan="2"><input type="password" name="re-password" placeholder="Re-enter Password" size = "56" /></td>
             </tr>
             <tr>
             	<td colspan="2">

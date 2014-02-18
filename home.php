@@ -34,7 +34,9 @@
 	$signup = strtotime(date("M d Y", strtotime($signupdate)));
 	$cur = strtotime(date("M d Y"));
 	$dateDiff = ($cur - $signup)/3600/24;
-	$rate = intval($done / $dateDiff);
+	if ($dateDiff != 0) {
+		$rate = intval($done / $dateDiff);
+	} else $rate = 0;
 	
 	// caculate remaining days
 	$query = "SELECT SUM(total), SUM(progress) FROM tasks WHERE uid=$userid";

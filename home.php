@@ -52,13 +52,20 @@
 	}
 	
 	//mark a task as done
-	if (isset($_GET['action']) && $_GET['action']=="done") {
-		$task_info = pg_query($dbconn, "SELECT total FROM tasks WHERE uid=$userid AND taskid=$_GET[taskid]");
-		$row = pg_fetch_array($task_info);
+	if (isset($_GET['action'])) {
+		//user can only modify his own task by check $_GET['uid'] = $_SESSION['user']
+		if ($_GET['action']=="done" && $_GET['uid'] == $_SESSION['user']) {
+			$task_info = pg_query($dbconn, "SELECT total FROM tasks WHERE uid=$userid AND taskid=$_GET[taskid]");
+			$row = pg_fetch_array($task_info);
 
-		$done_task_query = "UPDATE tasks SET (progress) = ($1) WHERE taskid = $2;";
-		$done_result = pg_prepare($dbconn, "done_task", $done_task_query);
-		$done_result = pg_execute($dbconn, "done_task", array($row['total'], $_GET['taskid']));
+			$done_task_query = "UPDATE tasks SET (progress) = ($1) WHERE taskid = $2;";
+			$done_result = pg_prepare($dbconn, "done_task", $done_task_query);
+			$done_result = pg_execute($dbconn, "done_task", array($row['total'], $_GET['taskid']));
+		} elseif ($_GET['action']=="remove" && $_GET['uid'] == $_SESSION['user']) {
+			$delete_task_query = "DELETE FROM tasks WHERE taskid=$1;";
+			$delete_result = pg_prepare($dbconn, "delete_task", $delete_task_query);
+			$delete_result = pg_execute($dbconn, "delete_task", array($_GET['taskid']));
+		}
 	}
 
 	//change sort methods
@@ -102,10 +109,11 @@
 						$createtime = $row['createtime'];
 				?>
 					<li>
-						<?php echo("<a class='dscrp' href='edit-task.php?taskid=$taskid'>$dscrp </a>
-									(<a href='delete-task.php?taskid=$taskid'>remove</a>
-									<a href='home.php?action=done&taskid=$taskid'>done</a>) 
-									<code>Created at $createtime</code>")?>
+						<?php echo("<a class='dscrp' href='edit-task.php?taskid=$taskid'>$dscrp</a>"); ?>
+						<?php echo ("(<a href='home.php?action=remove&taskid=$taskid&uid=$userid'>remove</a>"); ?>			
+						<?php echo ("<a href='home.php?action=done&taskid=$taskid&uid=$userid'>done</a>)"); ?>	 
+						<?php echo ("<code>Created at $createtime</code>"); ?>
+						
 						<table border=1>
 						<tr>
 							<?php

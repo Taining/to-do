@@ -75,8 +75,8 @@
 	echo("<input type='hidden' name='numOfTasks' value=$numOfTasks>");
 	echo("<input type='submit' name='submit' value='update'>
 			</form>");
-			
-	require "footer.php";
+	
 ?>
+</div>
 
-	</div>
+<?php require "footer.php"; ?>

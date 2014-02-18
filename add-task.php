@@ -59,6 +59,8 @@
 		$total = $_REQUEST['total'];
 	}
 ?>
+
+<div class="container">
 	<form method="POST">
 		<table class="form" id="add-task">
 		<tr>
@@ -90,6 +92,7 @@
 		</tr>
 		</table>
 	</form>
+</div>
 <?php
 	require "footer.php";
 ?>	

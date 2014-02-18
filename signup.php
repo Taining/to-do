@@ -65,7 +65,8 @@
 		unset($_POST);
 	}
 ?>
-	
+
+<div class="container">
 	<form method = "POST">
         <table class="form" id="signup">
         	<tr>
@@ -215,5 +216,6 @@
             </tr>
         </table>
     </form>
+</div>
 
 <?php	require 'footer.php'; ?>

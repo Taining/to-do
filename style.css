@@ -17,7 +17,7 @@ ul {
 /* login */
 
 .form {
-    margin: 50px auto;
+    margin: 0 auto;
 }
 
 .form input{
@@ -59,12 +59,16 @@ ul {
 #signup input:-ms-input-placeholder { font-size: 12px; color: #555; }
 #signup input:-moz-placeholder { font-size: 12px; color: #555; }
 
-#signup,#add-task .submit {
+#signup .submit {
 	float: right;
 }
 
 #sex {
 	margin-top: 5px;
+}
+
+#add-task .submit {
+	float: right;
 }
 
 /* sign up */
@@ -104,7 +108,7 @@ header {
 footer {
 	position: relative;
 	bottom: 0;
-	margin: 0;
+	/*margin: 0;*/
 	/*bottom: -1em;
 	left: -1em;
 	right: -1em;
@@ -112,7 +116,6 @@ footer {
 	background: #751B05;
 	text-align: center;
 	color:#ededed;
-	/*width:105%;*/
 	width: 100%;
 }
 footer p {

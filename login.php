@@ -33,6 +33,7 @@
     
     require 'header.php';
 ?>  
+<div class="container">
     <form method = "POST">
         <table class="form">
             <tr>
@@ -52,5 +53,6 @@
             </tr>
         </table>
     </form>
+</div>
 
 <?php require 'footer.php'; ?>

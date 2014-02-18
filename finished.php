@@ -24,6 +24,7 @@
 	$result = pg_query($dbconn, $query);
 	if(pg_num_rows($result) < 1) {
 		echo("<div class='container'>You have no finished tasks.</div>");
+		require 'footer.php';
 		exit;
 	}
 ?>

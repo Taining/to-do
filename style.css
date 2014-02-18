@@ -10,6 +10,10 @@ ul {
 	line-height:2em;
 }
 
+.center {
+	text-align:center;
+}
+
 /* login */
 
 .form {
@@ -105,7 +109,7 @@ footer {
 	left: -1em;
 	right: -1em;
 	padding:0 -2em -2em -2em;*/
-	background: #DA816C;
+	background: #751B05;
 	text-align: center;
 	color:#ededed;
 	/*width:105%;*/
@@ -226,17 +230,38 @@ nav #current-page a {
 	font-weight:800;
 	color:#640202;
 }
+.dscrp:hover {
+	color: #CC6161;
+}
 
 #container-col {
 	position: relative;
 	height: 200px;
+	padding: 1 0 2em 0;
+}
+.small-container {
+	padding: 1em 3em;
 }
 #options {
 	border: 4px solid #CC6161;
-	width: 400px;
+	width: 300px;
 	height: 200px;
 	position: absolute;
 	left: 40px;
+	border-radius: 15px;
+	line-height: 1em;
+}
+#options a {
+	color:#CC6161;
+	text-decoration:none;
+	font-size:1.1em;
+}
+#options a:hover {
+	color:#F6AFAF;
+}
+	
+#options .small-text {
+	font-size:0.7em;
 }
 #info {
 	border: 4px solid #CC6161;
@@ -244,4 +269,34 @@ nav #current-page a {
 	height:200px;
 	position: absolute;
 	left: 520px;
+	border-radius: 15px;
+}
+
+.highlight {
+	font-size: 1.5em;
+	color:#CC6161;
+}
+
+.highlight-less {
+	font-size: 1.1em;
+	color:#CC6161;
+	margin:2px;
+}
+
+/* edit-task */
+
+.aux {
+	float:right;
+}
+#go-back {
+	float:left;
+	background-color: #DA816C;
+    border-radius: 3px;
+    border: 1px solid #bdc7d8;
+    font-weight: bold;
+    height: 25px;
+}
+#go-back a {
+	color:black;
+	cursor: default;
 }

@@ -47,27 +47,23 @@
 						<?php
 							for($i = 0; $i < $total; $i++) {
 								if($i < $progress - 1) {
-									echo("<td><div class='cell'></div></td>");
+									echo("<td class='completed'></td>");
 								} else if ($i == $progress - 1) {
-									echo("<td>
-											<div class='cell'>
-												<form action='undo.php' method='post'>
-													<input type='hidden' name='undo' value=$taskid>
-													<input type='submit' name='submit' value='Undo' class='btn'>
-												</form>
-											</div>
+									echo("<td class='last'>
+											<form action='undo.php' method='post'>
+												<input type='hidden' name='undo' value=$taskid>
+												<input type='submit' name='submit' value='Undo' class='btn'>
+											</form>
 										  </td>");
 								} else if ($i == $progress){
-									echo("<td>
-											<div class='cell'>
-												<form action='make-progress.php' method='post'>
-													<input type='hidden' name='makeProgress' value=$taskid>
-													<input type='submit' name='submit' value='Do it!' class='btn'>
-												</form>
-											</div>
+									echo("<td class='next'>
+											<form action='make-progress.php' method='post'>
+												<input type='hidden' name='makeProgress' value=$taskid>
+												<input type='submit' name='submit' value='Do it!' class='btn'>
+											</form>
 										  </td>");
 								} else {
-									echo("<td><div class='cell'></div></td>");
+									echo("<td class='uncompleted'></td>");
 								}
 							}
 						?>

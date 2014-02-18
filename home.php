@@ -150,26 +150,29 @@
 			</div> <!-- end of tasks -->
 			
 			<div id=container-col>
-				<div id="options">
+				<div id="options" class="small-container">
 					<p><a href="add-task.php">Add new task</a></p>
-					<p><a href="ordering.php">Order of displaying tasks</a></p>
+					<p class='small-text'>--Your new task</p>
+					<p><a href="ordering.php">Define your own order of display</a></p>
+					<p class='small-text'>--Define the order of displaying your tasks</p>
 					<p><a href="finished.php">Finished tasks</a></p>
+					<p class='small-text'>--An archive of tasks that you have finished</p>
 				</div>
 			
-				<div id="info">
+				<div id="info" class="small-container">
 					<div id="data">
 					<?php 
-						echo("Rate: $rate<br>");
+						echo("Rate: <span class='highlight'>$rate</span> units per day (One unit is 30 mins work)<br>");
 						if(isset($remainingDays)) {
-							echo("Remaining: $remaining = $remainingDays days work"); 
+							echo("Remaining: $remaining = <span class='highlight'>$remainingDays</span> days work"); 
 						} else {
 							echo("Remaining: $remaining");
 						}
 					?>
 					</div>
 					<div id="instr">
-						<br>Click on "Do it!" to make progress
-						<br>Click on "Undo" to make the last unit as undone
+						<br>Click on "<span class='highlight-less'>Do it!</span>" to make progress
+						<br>Click on "<span class='highlight-less'>Undo</span>" to make the last unit as undone
 						<br>Click on task title to see task detail
 					</div>
 				</div>

@@ -57,7 +57,7 @@
 		echo("Invalid ordering.");
 	}
 	
-	echo("<form action='update-ordering.php' method='post'>");
+	echo("<form method='post'>");
 	
 	while ($row = pg_fetch_array($result)) {
 		echo("<label>$row[dscrp]:

@@ -7,7 +7,7 @@
 	require "config.inc";
 	require "header.php";
 	
-	function addToDatabase(&$dscrp, &$details, &$total, &$error, $db_name, $db_user, $db_password) {
+	function addToDatabase(&$dscrp, &$details, &$total, &$error, $db_name, $db_user, $db_password, $priority) {
 		if ((trim($_REQUEST['dscrp']) == "") || (trim($_REQUEST['total']) == "")) {
 			$dscrp=$_REQUEST['dscrp'];
 			$total=$_REQUEST['total'];
@@ -33,9 +33,9 @@
 		$row = pg_fetch_row($result);
 		$ordering = $row[0] + 1;
 		
-		$query = "INSERT INTO tasks(uid, taskid, dscrp, details, total, progress, ordering, createtime) VALUES($userid, $taskid, $1, $2, $3, 0, $ordering, $4)";
+		$query = "INSERT INTO tasks(uid, taskid, dscrp, details, total, progress, ordering, createtime, priority) VALUES($userid, $taskid, $1, $2, $3, 0, $ordering, $4, $5)";
 		$result = pg_prepare($dbconn, "my_query", $query);
-		$result = pg_execute($dbconn, "my_query", array($dscrp, $details, $total, date("Y-m-d")));
+		$result = pg_execute($dbconn, "my_query", array($dscrp, $details, $total, date("Y-m-d"), $priority));
 		if($result) {
 			header("Location: home.php");
 		} else {
@@ -50,7 +50,7 @@
 	$error = 0;
 	
 	if(isset($_REQUEST['dscrp']) && isset($_REQUEST['total'])) {
-		addToDatabase($_REQUEST['dscrp'], $_REQUEST['details'], $_REQUEST['total'], $error, $db_name, $db_user, $db_password);
+		addToDatabase($_REQUEST['dscrp'], $_REQUEST['details'], $_REQUEST['total'], $error, $db_name, $db_user, $db_password, $_REQUEST['priority']);
 	}
 	
 	if($error == 1) {
@@ -80,10 +80,10 @@
 		<tr>
 			<td>
 				Priority:
-				<select>
-					<option value="1">Low</option>
+				<select name="priority">
+					<option value="3">Low</option>
 					<option value="2" selected="1">Normal</option>
-					<option value="3">High</option>
+					<option value="1">High</option>
 				</select>
 			</td>
 		</tr>

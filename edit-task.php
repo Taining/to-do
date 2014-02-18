@@ -2,7 +2,9 @@
     session_save_path("sess");
 	session_start();
 	
-	function updateToDatabase($dbconn, $taskid, $dscrp, $details, $total) {
+	$page = "edit-task";
+
+	function updateToDatabase($dbconn, $taskid, $dscrp, $details, $total, $priority) {
 		if ((trim($_REQUEST['dscrp']) == "") || (trim($_REQUEST['total']) == "")) {
 			$dscrp=$_REQUEST['dscrp'];
 			$total=$_REQUEST['total'];
@@ -10,9 +12,9 @@
 			$error = 1;
 			return $error;
 		}
-		$query = "UPDATE tasks SET dscrp=$1, details=$2, total=$3 WHERE taskid=$4";
+		$query = "UPDATE tasks SET dscrp=$1, details=$2, total=$3 priority=$4 WHERE taskid=$5";
 		$result = pg_prepare($dbconn, "my_query", $query);
-		$result = pg_execute($dbconn, "my_query", array($dscrp, $details, $total, $taskid));
+		$result = pg_execute($dbconn, "my_query", array($dscrp, $details, $total, $priority, $taskid));
 		if($result) {
 			header("Location: home.php");
 		} else {
@@ -29,34 +31,34 @@
 		exit;
 	}
 	
-	// get task id
-	if(!isset($_REQUEST['taskid'])) {
+	//get task info
+	if (isset($_REQUEST['taskid'])) {
+		$taskid = $_REQUEST['taskid'];
+	} else {
 		header("Location: home.php");
 		exit;
-	} else {
-		$taskid = $_REQUEST['taskid'];
 	}
-	
-	$page = "edit-task";
-	
+
 	require "config.inc";
 	require "header.php";
-		
+	
+	$error = 0;
 	$dbconn = pg_connect("host=127.0.0.1 port=5432 dbname=$db_name user=$db_user password=$db_password");
 	if (!$dbconn){
 		echo("Can't connect to the database");	
 		exit;
 	}
-
-	$error = 0;
-	if(isset($_REQUEST['taskid']) && isset($_REQUEST['dscrp']) && isset($_REQUEST['details']) && isset($_REQUEST['total'])) {
-		$error = updateToDatabase($dbconn, $_REQUEST['taskid'], $_REQUEST['dscrp'], $_REQUEST['details'], $_REQUEST['total']);
+	if (isset($_REQUEST['submit'])) {
+		if(isset($_REQUEST['taskid']) && isset($_REQUEST['dscrp']) && isset($_REQUEST['details']) && isset($_REQUEST['total']) && is_numeric($_REQUEST['total'])) {
+			$error = updateToDatabase($dbconn, $_REQUEST['taskid'], $_REQUEST['dscrp'], $_REQUEST['details'], $_REQUEST['total'], $_REQUEST['priority']);
+		}
 	}
 	
 	if($error == 1) {
 		$dscrp = $_REQUEST['dscrp'];
 		$details = $_REQUEST['details'];
 		$total = $_REQUEST['total'];
+		$priority = $_REQUEST['priority'];
 	} else {
 		// get task info
 		$query = "SELECT * FROM tasks WHERE taskid=$taskid";
@@ -65,6 +67,7 @@
 		$dscrp = $row['dscrp'];
 		$details = $row['details'];
 		$total = $row['total'];
+		$priority = $row['priority'];
 	}
 ?>
 
@@ -88,7 +91,8 @@
 		<input type="submit" name="submit" value="Update task information">
 		<button><a href='home.php'>Go back</a></button>
 	</form>
---!>
+-->
+<div class="container">
 	<form method="POST">
 		<table class="form" id="add-task">
 		<tr>
@@ -108,10 +112,10 @@
 		<tr>
 			<td>
 				Priority:
-				<select>
-					<option value="1">Low</option>
-					<option value="2" selected="1">Normal</option>
-					<option value="3">High</option>
+				<select name="priority">
+					<option value="3" <?php if($priority==3) echo "selected=1"; ?> >Low</option>
+					<option value="2" <?php if($priority==2) echo "selected=1"; ?> >Normal</option>
+					<option value="1" <?php if($priority==1) echo "selected=1"; ?> >High</option>
 				</select>
 			</td>
 		</tr>
@@ -121,3 +125,6 @@
 		</tr>
 		</table>
 	</form>
+</div>
+
+<?php require 'footer.php' ?>

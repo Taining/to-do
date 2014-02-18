@@ -34,6 +34,7 @@ CREATE TABLE tasks(
 	total INTEGER,
 	progress INTEGER,
 	ordering INTEGER, -- Order of displaying
+	priority INTEGER,
 	createtime DATE,
 	--finishtime DATE, 
 	FOREIGN KEY (uid) REFERENCES appuser(uid)

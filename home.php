@@ -109,7 +109,7 @@
 						$createtime = $row['createtime'];
 				?>
 					<li>
-						<?php echo("<a class='dscrp' href='edit-task.php?taskid=$taskid'>$dscrp</a>"); ?>
+						<?php echo("<a class='dscrp' href='edit-task.php?taskid=$taskid&uid=$userid'>$dscrp</a>"); ?>
 						<?php echo ("(<a href='home.php?action=remove&taskid=$taskid&uid=$userid'>remove</a>"); ?>			
 						<?php echo ("<a href='home.php?action=done&taskid=$taskid&uid=$userid'>done</a>)"); ?>	 
 						<?php echo ("<code>Created at $createtime</code>"); ?>

@@ -5,6 +5,7 @@
 
 	require 'config.inc';
 	require 'header.php';
+    include 'functions.php';
 
     $EMPTY = "";
 	$fname = $lname = $email = $reemail = $password = $sex = $news = $year = $month = $day = $policy = $errMessage = $EMPTY;
@@ -70,16 +71,6 @@
         }
 
         return $errMessage;
-    }
-
-    function connectToDatabase($db_name, $db_user, $db_password){
-        $dbconn = pg_connect("host=localhost port=5432 dbname=$db_name user=$db_user password=$db_password");
-        if(!$dbconn){
-            echo "Aw, Snap!";
-            exit;      
-        }
-
-        return $dbconn; 
     }
 
 ?>

@@ -44,7 +44,7 @@
 		if ($sex != $_POST['sex']) {
 			$sex = $_POST['sex'];
 		}
-		if ($_POST['news'] == 1) {
+		if (isset($_POST['news']) && $_POST['news'] == 1) {
 			$news = 'true';
 		} else $news = 'false';
 

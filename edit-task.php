@@ -9,7 +9,7 @@
 	require "header.php";
 	
 	// authentication of user
-	authenticate();
+	$userid = authenticate();
 	
 	// get task info
 	if (isset($_REQUEST['taskid']) && isset($_REQUEST['uid']) && $_REQUEST['uid']==$_SESSION['user']) {

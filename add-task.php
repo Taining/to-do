@@ -8,6 +8,8 @@
 	require "header.php";
 	require "functions.php";
 	
+	$userid = authenticate();
+	
 	$dscrp = "";
 	$details = "";
 	$total = "";

@@ -8,7 +8,7 @@
 	include 'functions.php';
 
 	//only authenticated users can access this page
-	authenticate();
+	$userid = authenticate();
 
 	//connect to database
 	$dbconn = connectToDatabase($db_name, $db_user, $db_password);

@@ -7,6 +7,8 @@
 	require "functions.php";
 	require "config.inc";
 	require "header.php";
+	
+	$userid = authenticate();
 ?>
 	
 	<div class=container>

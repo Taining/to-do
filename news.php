@@ -8,7 +8,7 @@
 	require "header.php";
 	require "functions.php";
 	
-	authenticate();
+	$userid = authenticate();
 		
 	$dbconn = connectToDatabase($db_name, $db_user, $db_password);
 

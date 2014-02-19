@@ -16,11 +16,7 @@
 	require "config.inc";
 	require "header.php";
 		
-	$dbconn = pg_connect("host=127.0.0.1 port=5432 dbname=$db_name user=$db_user password=$db_password");
-	if (!$dbconn){
-		echo("Can't connect to the database");	
-		exit;
-	}
+	$dbconn = connectToDatabase($db_name, $db_user, $db_password);
 	
 	$rate = 0;
 	$remaining = 0;
@@ -28,28 +24,6 @@
 	
 	caculateRate($dbconn, $userid, $rate);
 	caculateRemaining($dbconn, $rate, $userid, $remaining, $remainingDays);
-	
-	function makeProgress($dbconn, $taskid) {
-		$get_progress_query = "SELECT progress, uid FROM tasks WHERE taskid=$taskid";
-		$result = pg_query($dbconn, $get_progress_query);
-		$row = pg_fetch_row($result);
-		
-		// progress++
-		$progress = $row[0];
-		$progress += 1;
-		$update_query = "UPDATE tasks SET progress=$progress WHERE taskid=$taskid";
-		pg_query($dbconn, $update_query);
-		
-		// done++
-		$uid = $row[1];
-		$get_done_query = "SELECT done FROM appuser WHERE uid=$uid";
-		$result = pg_query($dbconn, $get_done_query);
-		$row = pg_fetch_row($result);
-		$done = $row[0];
-		$done += 1;
-		$update_query = "UPDATE appuser SET done=$done WHERE uid=$uid";
-		pg_query($dbconn, $update_query);
-	}
 	
 	// make progress
 	if (isset($_REQUEST['makeProgress']) && isset($_REQUEST['postback'])) {
@@ -67,18 +41,6 @@
 			undo($dbconn, $taskid);
 			$_SESSION['postback'] = mt_rand();
 		}
-	}
-	
-	function undo($dbconn, $taskid) {
-		$query = "SELECT progress FROM tasks WHERE taskid=$taskid";
-		$result = pg_query($dbconn, $query);
-
-		$row = pg_fetch_array($result);
-		$progress = $row['progress'];
-		$progress = $progress - 1;
-	
-		$query = "UPDATE tasks SET progress = $progress WHERE taskid=$taskid";
-		pg_query($dbconn, $query);
 	}	
 	
 	// mark a task as done

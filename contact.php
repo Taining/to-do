@@ -4,13 +4,6 @@
 
 	$page = "contact";
 
-	if (isset($_SESSION['user'])) {
-		$userid = $_SESSION['user'];
-	} else {
-		header("Location: login.php");
-		exit;
-	}
-
 	require "config.inc";
 	require "header.php";
 ?>

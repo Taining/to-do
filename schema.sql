@@ -1,17 +1,6 @@
 DROP TABLE appuser CASCADE;
 DROP TABLE tasks CASCADE;
 
-/*
-CREATE TABLE appuser (
-	uid SERIAL,
-	email VARCHAR(100),
-	fname VARCHAR(20),
-	lname VARCHAR(20),
-	password VARCHAR(100),
-	PRIMARY KEY (uid)
-);
-*/
-
 CREATE TABLE appuser (
 	uid SERIAL,
 	email VARCHAR(100),

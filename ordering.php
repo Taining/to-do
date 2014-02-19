@@ -4,44 +4,18 @@
 	
 	$page = "ordering";
 	
+	require "functions.php";
 	require "config.inc";
 	require "header.php";
-	
-	function update($dbconn, $orderings) {	
-		$tasks_query = "SELECT taskid FROM tasks WHERE uid = $_SESSION[user]";
-		$tasks_result = pg_query($dbconn, $tasks_query);
-	
-		while ($row = pg_fetch_row($tasks_result)) {
-			$taskid = $row[0];
-			$order = $orderings[$taskid];
-		
-			if(isset($tasks[$order])) {
-				header("Location: ordering.php?error=1");
-				exit;
-			}
-		
-			$tasks[$order] = 1;
-		
-			$query = "UPDATE tasks SET ordering=$order WHERE taskid = $taskid";
-			pg_query($dbconn, $query);
-		}
-		
-		$_SESSION['sort'] = "none";
-		header("Location: home.php");
-	}
 ?>
 	
 	<div class=container>
 	
 <?php
-	$dbconn = pg_connect("host=127.0.0.1 port=5432 dbname=$db_name user=$db_user password=$db_password");
-	if(!$dbconn){
-		echo("Can't connect to the database");	
-		exit;
-	}
+	$dbconn = connectToDatabase($db_name, $db_user, $db_password);
 	
 	if(isset($_REQUEST['submit'])) {
-		update($dbconn, $_REQUEST);
+		defineOrdering($dbconn, $_REQUEST);
 		exit;
 	}
 	

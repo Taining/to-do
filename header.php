@@ -1,10 +1,12 @@
 <?php
+	// check for log out
 	if (isset($_GET['action']) && $_GET['action'] == "logout") {
 		unset($_SESSION['user']);
 		header("Location: login.php");
 	}
 	$currentURL = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -12,6 +14,7 @@
 		<title>To-do Manager</title>
 		<link rel="stylesheet" type="text/css" href="style.css">
 	</head>
+	
 	<body>			
 		<header>
 			<div class='header-container'>
@@ -28,6 +31,7 @@
 					}
 				?>
 				</div>
+				
 				<div id='title'>
 					<h1>To-do Manager</h1>
 				</div>
@@ -70,5 +74,5 @@
 						?>
 					</ul>
 				</nav>
-			</div>
+			</div> <!-- end of header-container -->
 		</header>

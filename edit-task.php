@@ -3,44 +3,24 @@
 	session_start();
 	
 	$page = "edit-task";
-
-	function updateToDatabase($dbconn, $taskid, $dscrp, $details, $total, $priority) {
-		$query = "UPDATE tasks SET dscrp=$1, details=$2, total=$3, priority=$4 WHERE taskid=$5;";
-		$result = pg_prepare($dbconn, "my_query", $query);
-		$result = pg_execute($dbconn, "my_query", array($dscrp, $details, $total, $priority, $taskid));
-		if($result) {
-			header("Location: home.php");
-		} else {
-			echo("Failed to edit task.");
-			return;
-		}
-	}
+	
+	require "config.inc";
+	require "functions.php";
+	require "header.php";
 	
 	// authentication of user
-	if (isset($_SESSION['user'])) {
-		$userid = $_SESSION['user'];
-	} else {
-		header("Location: login.php");
-		exit;
-	}
+	authenticate();
 	
-	//get task info
+	// get task info
 	if (isset($_REQUEST['taskid']) && isset($_REQUEST['uid']) && $_REQUEST['uid']==$_SESSION['user']) {
 		$taskid = $_REQUEST['taskid'];
 	} else {
 		header("Location: home.php");
 		exit;
 	}
-
-	require "config.inc";
-	require "header.php";
 	
 	$errMessage = "";
-	$dbconn = pg_connect("host=127.0.0.1 port=5432 dbname=$db_name user=$db_user password=$db_password");
-	if (!$dbconn){
-		echo("Can't connect to the database");	
-		exit;
-	}
+	$dbconn = connectToDatabase($db_name, $db_user, $db_password);
 
 	if (isset($_REQUEST['submit'])) {
 		if($_REQUEST['dscrp'] == "" || $_REQUEST['total'] == "") {

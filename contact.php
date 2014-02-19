@@ -3,7 +3,6 @@
 	session_start();
 
 	$page = "contact";
-
 	require "config.inc";
 	require "header.php";
 ?>

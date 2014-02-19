@@ -6,36 +6,7 @@
 	
 	require "config.inc";
 	require "header.php";
-	
-	function addToDatabase(&$dscrp, &$details, &$total, $db_name, $db_user, $db_password, $priority) {
-		$userid = $_SESSION['user'];
-		//userid, task-dscrp, total-time, progress
-		$dbconn = pg_connect("host=127.0.0.1 port=5432 dbname=$db_name user=$db_user password=$db_password");
-		if(!$dbconn){
-			echo("Can't connect to the database");	
-			return;
-		}
-		
-		$query = "SELECT MAX(taskid) FROM tasks;";
-		$result=pg_query($dbconn, $query);
-		$row = pg_fetch_row($result);
-		$taskid = $row[0] + 1;
-		
-		$query = "SELECT COUNT(*) FROM tasks;";
-		$result=pg_query($dbconn, $query);
-		$row = pg_fetch_row($result);
-		$ordering = $row[0] + 1;
-		
-		$query = "INSERT INTO tasks(uid, taskid, dscrp, details, total, progress, ordering, createtime, priority) VALUES($userid, $taskid, $1, $2, $3, 0, $ordering, $4, $5)";
-		$result = pg_prepare($dbconn, "my_query", $query);
-		$result = pg_execute($dbconn, "my_query", array($dscrp, $details, $total, date("Y-m-d"), $priority));
-		if($result) {
-			header("Location: home.php");
-		} else {
-			echo("Failed to add task to database.");
-			return;
-		}
-	}
+	require "functions.php";
 	
 	$dscrp = "";
 	$details = "";
@@ -90,6 +61,7 @@
 		</table>
 	</form>
 </div>
+
 <?php
 	require "footer.php";
 ?>	

@@ -95,4 +95,65 @@
 		pg_query($dbconn, $query);
 	}
 	
+	function addToDatabase(&$dscrp, &$details, &$total, $db_name, $db_user, $db_password, $priority) {
+		$userid = $_SESSION['user'];
+		//userid, task-dscrp, total-time, progress
+		$dbconn = connectToDatabase($db_name, $db_user, $db_password);
+		
+		$query = "SELECT MAX(taskid) FROM tasks;";
+		$result=pg_query($dbconn, $query);
+		$row = pg_fetch_row($result);
+		$taskid = $row[0] + 1;
+		
+		$query = "SELECT COUNT(*) FROM tasks;";
+		$result=pg_query($dbconn, $query);
+		$row = pg_fetch_row($result);
+		$ordering = $row[0] + 1;
+		
+		$query = "INSERT INTO tasks(uid, taskid, dscrp, details, total, progress, ordering, createtime, priority) VALUES($userid, $taskid, $1, $2, $3, 0, $ordering, $4, $5)";
+		$result = pg_prepare($dbconn, "my_query", $query);
+		$result = pg_execute($dbconn, "my_query", array($dscrp, $details, $total, date("Y-m-d"), $priority));
+		if($result) {
+			header("Location: home.php");
+		} else {
+			echo("Failed to add task to database.");
+			return;
+		}
+	}
+	
+	function updateToDatabase($dbconn, $taskid, $dscrp, $details, $total, $priority) {
+		$query = "UPDATE tasks SET dscrp=$1, details=$2, total=$3, priority=$4 WHERE taskid=$5;";
+		$result = pg_prepare($dbconn, "my_query", $query);
+		$result = pg_execute($dbconn, "my_query", array($dscrp, $details, $total, $priority, $taskid));
+		if($result) {
+			header("Location: home.php");
+		} else {
+			echo("Failed to edit task.");
+			return;
+		}
+	}
+	
+	function defineOrdering($dbconn, $orderings) {	
+		$tasks_query = "SELECT taskid FROM tasks WHERE uid = $_SESSION[user]";
+		$tasks_result = pg_query($dbconn, $tasks_query);
+	
+		while ($row = pg_fetch_row($tasks_result)) {
+			$taskid = $row[0];
+			$order = $orderings[$taskid];
+		
+			if(isset($tasks[$order])) {
+				header("Location: ordering.php?error=1");
+				exit;
+			}
+		
+			$tasks[$order] = 1;
+		
+			$query = "UPDATE tasks SET ordering=$order WHERE taskid = $taskid";
+			pg_query($dbconn, $query);
+		}
+		
+		$_SESSION['sort'] = "none";
+		header("Location: home.php");
+	}
+	
 ?>

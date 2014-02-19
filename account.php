@@ -5,45 +5,21 @@
 	$page = "acount";
 	require 'config.inc';
 	require 'header.php';
+	include 'functions.php';
 
 	//only authenticated users can access this page
-	if (!isset($_SESSION['user'])) {
-		header("Location: login.php");
-		exit;
-	}
+	authenticate();
 
-	$dbconn = pg_connect("host=localhost port=5432 dbname=$db_name user=$db_user password=$db_password");
-	if(!$dbconn){
-		echo "Aw, Snap!";
-		exit;
-	}
-	$result = pg_query($dbconn, "SELECT * FROM appuser WHERE uid = $_SESSION[user]");
-	$row = pg_fetch_array($result);
-	
-	$fname = $row['fname'];
-	$lname = $row['lname'];
-	$email = $row['email'];
-	$sex = $row['sex'];
-	$birthday = explode("-", $row['birthday']);
-	$year = intval($birthday[0]);
-	$month = intval($birthday[1]);
-	$day = intval($birthday[2]);
-	$signupdate = $row['signupdate'];
-	$news = $row['news'];
-	$password = $row['password'];
+	//connect to database
+	$dbconn = connectToDatabase($db_name, $db_user, $db_password);
 
-	$EMPTY = "";
-	$inforMessage = $EMPTY;
-	$pwdMessage = $EMPTY;
+	//when user press update info
+	$pwdMessage = $inforMessage = $EMPTY = "";
 	if (isset($_POST['info'])) {
-		if($_POST['fname'] == $EMPTY || $_POST['lname'] == $EMPTY){
-			$inforMessage = "Please enter your name";
-		} else if ($_POST['email'] == $EMPTY || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
-			$inforMessage = "Please enter a valid email.";
-		}
-		if ($sex != $_POST['sex']) {
-			$sex = $_POST['sex'];
-		}
+		//check user inputs
+		$inforMessage = checkUserInfo();
+
+		$sex = $_POST['sex'];
 		if (isset($_POST['news']) && $_POST['news'] == 1) {
 			$news = 'true';
 		} else $news = 'false';
@@ -65,17 +41,27 @@
 				$inforMessage = "Your information has been updated.";
 			}
 			//prevent resubmission
-			unset($_POST);
+			preventFormResubmission();
 		}
 
-	} else if (isset($_POST['pwd'])) {
-		if (md5($_POST['old-password']) != $password) {
-			$pwdMessage = "Please enter correct old password.";
-		} elseif ($_POST['new-password'] == $EMPTY) {
-			$pwdMessage = "Please enter a new password.";
-		} elseif ($_POST['new-password'] != $_POST['re-password']) {
-			$pwdMessage = "New passwords do not match.";
-		} else {
+	}
+
+	//get user information
+	$result = pg_query($dbconn, "SELECT * FROM appuser WHERE uid = $_SESSION[user]");
+	$row = pg_fetch_array($result);
+	$fname = $row['fname'];
+	$lname = $row['lname'];
+	$email = $row['email'];
+	$sex = $row['sex'];
+	$birthday = explode("-", $row['birthday']);
+	$year = intval($birthday[0]);
+	$month = intval($birthday[1]);
+	$day = intval($birthday[2]);
+	$news = $row['news'];
+	$password = $row['password'];
+
+	if (isset($_POST['pwd'])) {
+		if (($pwdMessage = checkUserPassword($password)) == $EMPTY){
 			$update_pwd_query = "UPDATE appuser SET (password) = ($1) WHERE uid = $2;";
 			$result = pg_prepare($dbconn, "update_pwd", $update_pwd_query);
 			$result = pg_execute($dbconn, "update_pwd", array(md5($_POST['new-password']), $_SESSION['user']));
@@ -84,9 +70,34 @@
 				$pwdMessage = "Your password has been updated.";
 			}
 		}
-	} else {
-		$inforMessage = $EMPTY;
-		$pwdMessage = $EMPTY;
+	}
+
+	function checkUserInfo(){
+		$EMPTY = "";
+		if($_POST['fname'] == $EMPTY || $_POST['lname'] == $EMPTY){
+			$inforMessage = "Please enter your name";
+		} else if ($_POST['email'] == $EMPTY || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
+			$inforMessage = "Please enter a valid email.";
+		} else {
+			$inforMessage = $EMPTY;
+		}
+
+		return $inforMessage;
+	}
+
+	function checkUserPassword($password){
+		$EMPTY = "";
+		if (md5($_POST['old-password']) != $password) {
+			$pwdMessage = "Please enter correct old password.";
+		} elseif ($_POST['new-password'] == $EMPTY) {
+			$pwdMessage = "Please enter a new password.";
+		} elseif ($_POST['new-password'] != $_POST['re-password']) {
+			$pwdMessage = "New passwords do not match.";
+		} else {
+			$pwdMessage = $EMPTY;
+		}
+
+		return $pwdMessage;
 	}
 ?>
 
@@ -144,7 +155,7 @@
 				</tr>
 				<tr>
 					<td colspan="2">
-						<label><input type="checkbox" name="news" value="1" <?php if ($news) echo "checked"; ?>/>I'd like to recieve news from To-do Manager.</label>
+						<label><input type="checkbox" name="news" value="1" <?php if ($news=='t') echo "checked"; ?>/>I'd like to recieve news from To-do Manager.</label>
 					</td>
 				</tr>
 				<tr>

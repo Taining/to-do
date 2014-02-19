@@ -43,11 +43,6 @@
 		}
 	}
 
-
-	function preventFormResubmission(){
-		unset($_POST);
-	}
-
     function checkUserInputs() {
         //validate form input
         $EMPTY = "";

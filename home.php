@@ -16,11 +16,7 @@
 	require "config.inc";
 	require "header.php";
 		
-	$dbconn = pg_connect("host=127.0.0.1 port=5432 dbname=$db_name user=$db_user password=$db_password");
-	if (!$dbconn){
-		echo("Can't connect to the database");	
-		exit;
-	}
+	$dbconn = connectToDatabase($db_name, $db_user, $db_password);
 	
 	$rate = 0;
 	$remaining = 0;
@@ -29,7 +25,25 @@
 	caculateRate($dbconn, $userid, $rate);
 	caculateRemaining($dbconn, $rate, $userid, $remaining, $remainingDays);
 	
-	//mark a task as done
+	// make progress
+	if (isset($_REQUEST['makeProgress']) && isset($_REQUEST['postback'])) {
+		if($_REQUEST['postback'] == $_SESSION['postback']) {	
+			$taskid = $_REQUEST['makeProgress'];
+			makeProgress($dbconn, $taskid);
+			$_SESSION['postback'] = mt_rand();
+		}
+	}
+	
+	// undo
+	if(isset($_REQUEST['undo']) && isset($_REQUEST['postback'])) {
+		if($_REQUEST['postback'] == $_SESSION['postback']) {
+			$taskid = $_REQUEST['undo'];
+			undo($dbconn, $taskid);
+			$_SESSION['postback'] = mt_rand();
+		}
+	}	
+	
+	// mark a task as done
 	if (isset($_GET['action'])) {
 		//user can only modify his own task by check $_GET['uid'] = $_SESSION['user']
 		if ($_GET['action']=="done" && $_GET['uid'] == $_SESSION['user']) {
@@ -113,14 +127,16 @@
 										echo("<td class='completed'></td>");
 									} else if ($i == $progress - 1) {
 										echo("<td class='last'>
-												<form action='undo.php' method='post'>
+												<form method='post'>
+													<input type='hidden' name='postback' value='$_SESSION[postback]'>
 													<input type='hidden' name='undo' value=$taskid>
 													<input type='submit' name='submit' value='Undo' class='btn'>
 												</form>
 											  </td>");
 									} else if ($i == $progress){
 										echo("<td class='next'>
-												<form action='make-progress.php' method='post'>
+												<form method='post'>
+													<input type='hidden' name='postback' value='$_SESSION[postback]'>
 													<input type='hidden' name='makeProgress' value=$taskid>
 													<input type='submit' name='submit' value='Do it!' class='btn'>
 												</form>

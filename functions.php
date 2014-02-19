@@ -60,5 +60,39 @@
     function preventFormResubmission(){
     	unset($_POST);
     }
+    
+    function makeProgress($dbconn, $taskid) {
+		$get_progress_query = "SELECT progress, uid FROM tasks WHERE taskid=$taskid";
+		$result = pg_query($dbconn, $get_progress_query);
+		$row = pg_fetch_row($result);
+		
+		// progress++
+		$progress = $row[0];
+		$progress += 1;
+		$update_query = "UPDATE tasks SET progress=$progress WHERE taskid=$taskid";
+		pg_query($dbconn, $update_query);
+		
+		// done++
+		$uid = $row[1];
+		$get_done_query = "SELECT done FROM appuser WHERE uid=$uid";
+		$result = pg_query($dbconn, $get_done_query);
+		$row = pg_fetch_row($result);
+		$done = $row[0];
+		$done += 1;
+		$update_query = "UPDATE appuser SET done=$done WHERE uid=$uid";
+		pg_query($dbconn, $update_query);
+	}
+	
+	function undo($dbconn, $taskid) {
+		$query = "SELECT progress FROM tasks WHERE taskid=$taskid";
+		$result = pg_query($dbconn, $query);
+
+		$row = pg_fetch_array($result);
+		$progress = $row['progress'];
+		$progress = $progress - 1;
+	
+		$query = "UPDATE tasks SET progress = $progress WHERE taskid=$taskid";
+		pg_query($dbconn, $query);
+	}
 	
 ?>

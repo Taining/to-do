@@ -6,6 +6,7 @@
 	require 'config.inc';
 	require 'header.php';
 
+	//only authenticated users can access this page
 	if (!isset($_SESSION['user'])) {
 		header("Location: login.php");
 		exit;
@@ -13,7 +14,7 @@
 
 	$dbconn = pg_connect("host=localhost port=5432 dbname=$db_name user=$db_user password=$db_password");
 	if(!$dbconn){
-		$errMessage = "Connect to server failed";
+		echo "Aw, Snap!";
 		exit;
 	}
 	$result = pg_query($dbconn, "SELECT * FROM appuser WHERE uid = $_SESSION[user]");
@@ -35,26 +36,26 @@
 	$inforMessage = $EMPTY;
 	$pwdMessage = $EMPTY;
 	if (isset($_POST['info'])) {
-		if ($_POST['email'] != $EMPTY && !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
+		if($_POST['fname'] == $EMPTY || $_POST['lname'] == $EMPTY){
+			$inforMessage = "Please enter your name";
+		} else if ($_POST['email'] == $EMPTY || !filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
 			$inforMessage = "Please enter a valid email.";
-		} else {
-			if ($_POST['email'] != $EMPTY) {
-				$email = $_POST['email'];
-			}
-			if ($_POST['fname'] != $EMPTY) {
-				$fname = $_POST['fname'];
-			}
-			if ($_POST['lname'] != $EMPTY) {
-				$lname = $_POST['lname'];
-			}
-			if ($sex != $_POST['sex']) {
-				$sex = $_POST['sex'];
-			}
-			if ($_POST['news'] == 1) {
-				$news = 'true';
-			} else $news = 'false';
-			$birthday = $_POST['year']."-".$_POST['month']."-".$_POST['day'];
+		}
+		if ($sex != $_POST['sex']) {
+			$sex = $_POST['sex'];
+		}
+		if ($_POST['news'] == 1) {
+			$news = 'true';
+		} else $news = 'false';
 
+		//update parameters
+		$birthday = $_POST['year']."-".$_POST['month']."-".$_POST['day'];
+		$fname = $_POST['fname'];
+		$lname = $_POST['lname'];
+		$email = $_POST['email'];
+
+		//error message is empty, then update user info
+		if ($inforMessage == $EMPTY) {
 			//update user info
 			$update_user_query = "UPDATE appuser SET (email, fname, lname, birthday, news, sex) = ($1, $2, $3, $4, $5, $6) WHERE uid = $7;";
 			$result = pg_prepare($dbconn, "update_user", $update_user_query);
@@ -63,13 +64,12 @@
 			if ($result) {
 				$inforMessage = "Your information has been updated.";
 			}
-
 			//prevent resubmission
 			unset($_POST);
 		}
+
 	} else if (isset($_POST['pwd'])) {
 		if (md5($_POST['old-password']) != $password) {
-			echo md5($_POST['old-password']);
 			$pwdMessage = "Please enter correct old password.";
 		} elseif ($_POST['new-password'] == $EMPTY) {
 			$pwdMessage = "Please enter a new password.";
@@ -98,11 +98,11 @@
 			<table>
 				<div class="error" <?php if($inforMessage=="") echo "hidden"; ?> ><?php echo $inforMessage; ?></div>
 				<tr>
-					<td><label>First Name: <input type="text" name="fname" size="14" placeholder="<?php echo $fname; ?>"></label></td>
-					<td><label>Last Name: <input type="text" name="lname" size="14" placeholder="<?php echo $lname; ?>"></label></td>
+					<td><label>First Name: <input type="text" name="fname" size="14" value="<?php echo $fname; ?>"></label></td>
+					<td><label>Last Name: <input type="text" name="lname" size="14" value="<?php echo $lname; ?>"></label></td>
 				</tr>
 				<tr>
-					<td colspan="2"><label>Email: <input type="text" name="email" size="54" placeholder="<?php echo $email; ?>"></label></td>
+					<td colspan="2"><label>Email: <input type="text" name="email" size="54" value="<?php echo $email; ?>"></label></td>
 				</tr>
 				<tr>
 					<td colspan="2">

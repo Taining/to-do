@@ -155,7 +155,10 @@
             </tr>
             <tr>
                 <td></td>
-                <td><input type="submit" class="submit" value="Sign Up" /></td>
+                <td>
+                	<input type="submit" class="submit" value="Sign Up" />
+                	<button class="submit"><a href='login.php'><font color="black">Go back</font></a></button>
+                </td>
             </tr>
         </table>
     </form>

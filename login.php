@@ -6,15 +6,11 @@
 
     require 'config.inc';
     require 'header.php';
+    include 'functions.php';
 
-    $errMessage = "";
-    $email = "";
+    $errMessage = $email = "";
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
-        $dbconn = pg_connect("host=localhost port=5432 dbname=$db_name user=$db_user password=$db_password");
-        if(!$dbconn){
-            echo "Aw, Snap!";
-            exit;
-        } 
+        $dbconn = connectToDatabase($db_name, $db_user, $db_password);
 
         $email = $_POST['email'];
         $password = md5($_POST['password']);

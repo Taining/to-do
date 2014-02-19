@@ -1,0 +1,6 @@
+1. Estimate completion date for all tasks;
+2. Display numeric progress for each task;
+3. Allow cancelling of a task;
+4. In case a user accidentially marked a unit of work as completed, allow them to unmark it;
+5. Allow users to define the order the tasks appear in the All Tasks page. Users can display tasks by create date, priority and time units and users can even customize their own display order;
+6. All finished tasks will be archived.

@@ -2,6 +2,8 @@
     session_save_path("sess");
 	session_start();
 	
+	require "functions.php";
+	
 	if(!isset($_SESSION['postback'])) {
 		$postback=mt_rand();
 		$_SESSION['postback']=$postback;
@@ -9,12 +11,7 @@
 	
 	$page = "home";
 	
-	if (isset($_SESSION['user'])) {
-		$userid = $_SESSION['user'];
-	} else {
-		header("Location: login.php");
-		exit;
-	}
+	$userid = authenticate();
 	
 	require "config.inc";
 	require "header.php";
@@ -25,38 +22,12 @@
 		exit;
 	}
 	
-	// caculate rate
-	$query = "SELECT signupdate, done FROM appuser WHERE uid=$userid";
-	$result = pg_query($dbconn, $query);
-	if (!$result) {
-		echo("Cannot access database.");
-		exit;
-	}
-	$row = pg_fetch_array($result);
-	$signupdate = $row['signupdate'];
-	$done = $row['done'];
+	$rate = 0;
+	$remaining = 0;
+	$remainingDays = 0;
 	
-	$signup = strtotime(date("M d Y", strtotime($signupdate)));
-	$cur = strtotime(date("M d Y"));
-	$dateDiff = ($cur - $signup)/3600/24;
-	if ($dateDiff != 0) {
-		$rate = intval($done / $dateDiff);
-	} else $rate = 0;
-	
-	// caculate remaining days
-	$query = "SELECT SUM(total), SUM(progress) FROM tasks WHERE uid=$userid";
-	$result = pg_query($dbconn, $query);
-	if (!$result) {
-		echo("Cannot access database.");
-		exit;
-	}
-	$row = pg_fetch_row($result);
-	$total = $row[0];
-	$progress = $row[1];
-	$remaining = $total - $progress;
-	if(!$rate == 0) {
-		$remainingDays = ceil($remaining / $rate);
-	}
+	caculateRate($dbconn, $userid, $rate);
+	caculateRemaining($dbconn, $rate, $userid, $remaining, $remainingDays);
 	
 	//mark a task as done
 	if (isset($_GET['action'])) {
@@ -188,7 +159,7 @@
 					<?php 
 						echo("Rate: <span class='highlight'>$rate</span> units per day (One unit is 30 mins work)<br>");
 						if(isset($remainingDays)) {
-							echo("Remaining: $remaining = <span class='highlight'>$remainingDays</span> days work"); 
+							echo("Remaining: $remaining units = <span class='highlight'>$remainingDays</span> days work"); 
 						} else {
 							echo("Remaining: $remaining");
 						}

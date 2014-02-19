@@ -6,31 +6,13 @@
 	require 'config.inc';
 	require 'header.php';
 
-	$fname = $lname = $email = $reemail = $password = $sex = $news = $year = $month = $day = $policy = "";
-	$EMPTY = "";
-	$validated = true;
-	$errMessage = $EMPTY;
+    $EMPTY = "";
+	$fname = $lname = $email = $reemail = $password = $sex = $news = $year = $month = $day = $policy = $errMessage = $EMPTY;
 	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-		//validate form input
-		if ($_POST['fname'] == $EMPTY || $_POST['lname'] == $EMPTY) {
-			$errMessage = "Please enter your name.";
-		} else if ($_POST['email'] == $EMPTY) {
-			$errMessage = "Please enter your email.";
-		} else if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-			$errMessage = "Please enter a valid email.";
-		} else if ($_POST['password'] == $EMPTY) {
-			$errMessage = "Please enter your password.";
-		} else if ($_POST['re-password'] == $EMPTY || $_POST['re-password'] != $_POST['password']) {
-            $errMessage = "Your passwords do not match.";
-            $_POST['re-password'] = $EMPTY;
-        } else if (!checkdate($_POST['month'], $_POST['day'], $_POST['year'])) {
-			$errMessage = "Please enter a valid date.";
-		} else if (!isset($_POST['sex'])) {
-			$errMessage = "Please select your gender.";
-		} else if (!isset($_POST['policy'])) {
-			$errMessage = "Please agree to our Terms.";
-		}
+		//check user inputs
+        $errMessage = checkUserInputs();
 
+        //update parameters
 		$fname = $_POST['fname'];
 		$lname = $_POST['lname'];
 		$email = $_POST['email'];
@@ -50,11 +32,7 @@
         }
 
 		if ($errMessage == $EMPTY) {
-			$dbconn = pg_connect("host=localhost port=5432 dbname=$db_name user=$db_user password=$db_password");
-            if(!$dbconn){
-                $errMessage = "Connect to server failed";
-                exit;
-            } 
+			$dbconn = connectToDatabase($db_name, $db_user, $db_password);
 			$insert_user_query = "INSERT INTO appuser (email, fname, lname, password, birthday, signupdate, news, sex, done) VALUES($1, $2, $3, $4, $5, $6, $7, $8, 0);";
 			$result = pg_prepare($dbconn, "insert_user", $insert_user_query);
 			$result = pg_execute($dbconn, "insert_user", array($email, $fname, $lname, md5($password), "$year-$month-$day", date("Y-m-d"), $news, $sex));
@@ -68,6 +46,42 @@
 	function preventFormResubmission(){
 		unset($_POST);
 	}
+
+    function checkUserInputs() {
+        //validate form input
+        $EMPTY = "";
+        if ($_POST['fname'] == $EMPTY || $_POST['lname'] == $EMPTY) {
+            $errMessage = "Please enter your name.";
+        } else if ($_POST['email'] == $EMPTY) {
+            $errMessage = "Please enter your email.";
+        } else if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+            $errMessage = "Please enter a valid email.";
+        } else if ($_POST['password'] == $EMPTY) {
+            $errMessage = "Please enter your password.";
+        } else if ($_POST['re-password'] == $EMPTY || $_POST['re-password'] != $_POST['password']) {
+            $errMessage = "Your passwords do not match.";
+            $_POST['re-password'] = $EMPTY;
+        } else if (!checkdate($_POST['month'], $_POST['day'], $_POST['year'])) {
+            $errMessage = "Please enter a valid date.";
+        } else if (!isset($_POST['sex'])) {
+            $errMessage = "Please select your gender.";
+        } else if (!isset($_POST['policy'])) {
+            $errMessage = "Please agree to our Terms.";
+        }
+
+        return $errMessage;
+    }
+
+    function connectToDatabase($db_name, $db_user, $db_password){
+        $dbconn = pg_connect("host=localhost port=5432 dbname=$db_name user=$db_user password=$db_password");
+        if(!$dbconn){
+            echo "Aw, Snap!";
+            exit;      
+        }
+
+        return $dbconn; 
+    }
+
 ?>
 
 <div class="container">
@@ -100,7 +114,7 @@
             			Birthday: 
             			<select name="month">
                             <?php 
-                            if ($month == $EMPTY) {
+                            if ($month == $EMPTY || $month == 0) {
                                     echo "<option value='0' selected='1'>Month</option>";
                             }
                             for ($i=1; $i < 13; $i++) {
@@ -112,7 +126,7 @@
             			</select>
             			<select name="day">
                             <?php
-                                if ($day == $EMPTY) {
+                                if ($day == $EMPTY || $day == 0) {
                                     echo "<option value='0' selected='1'>Day</option>";
                                 }
                                 for ($i=1; $i < 32; $i++) {
@@ -124,7 +138,7 @@
             			</select>
             			<select name="year">
             				<?php
-                                if ($year == $EMPTY) {
+                                if ($year == $EMPTY || $year == 0) {
                                     echo "<option value='0' selected='1'>Year</option>";
                                 }
                                 for ($i=2014; $i > 1904; $i--) { 

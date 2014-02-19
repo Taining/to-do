@@ -29,7 +29,59 @@
 	caculateRate($dbconn, $userid, $rate);
 	caculateRemaining($dbconn, $rate, $userid, $remaining, $remainingDays);
 	
-	//mark a task as done
+	function makeProgress($dbconn, $taskid) {
+		$get_progress_query = "SELECT progress, uid FROM tasks WHERE taskid=$taskid";
+		$result = pg_query($dbconn, $get_progress_query);
+		$row = pg_fetch_row($result);
+		
+		// progress++
+		$progress = $row[0];
+		$progress += 1;
+		$update_query = "UPDATE tasks SET progress=$progress WHERE taskid=$taskid";
+		pg_query($dbconn, $update_query);
+		
+		// done++
+		$uid = $row[1];
+		$get_done_query = "SELECT done FROM appuser WHERE uid=$uid";
+		$result = pg_query($dbconn, $get_done_query);
+		$row = pg_fetch_row($result);
+		$done = $row[0];
+		$done += 1;
+		$update_query = "UPDATE appuser SET done=$done WHERE uid=$uid";
+		pg_query($dbconn, $update_query);
+	}
+	
+	// make progress
+	if (isset($_REQUEST['makeProgress']) && isset($_REQUEST['postback'])) {
+		if($_REQUEST['postback'] == $_SESSION['postback']) {	
+			$taskid = $_REQUEST['makeProgress'];
+			makeProgress($dbconn, $taskid);
+			$_SESSION['postback'] = mt_rand();
+		}
+	}
+	
+	// undo
+	if(isset($_REQUEST['undo']) && isset($_REQUEST['postback'])) {
+		if($_REQUEST['postback'] == $_SESSION['postback']) {
+			$taskid = $_REQUEST['undo'];
+			undo($dbconn, $taskid);
+			$_SESSION['postback'] = mt_rand();
+		}
+	}
+	
+	function undo($dbconn, $taskid) {
+		$query = "SELECT progress FROM tasks WHERE taskid=$taskid";
+		$result = pg_query($dbconn, $query);
+
+		$row = pg_fetch_array($result);
+		$progress = $row['progress'];
+		$progress = $progress - 1;
+	
+		$query = "UPDATE tasks SET progress = $progress WHERE taskid=$taskid";
+		pg_query($dbconn, $query);
+	}	
+	
+	// mark a task as done
 	if (isset($_GET['action'])) {
 		//user can only modify his own task by check $_GET['uid'] = $_SESSION['user']
 		if ($_GET['action']=="done" && $_GET['uid'] == $_SESSION['user']) {
@@ -113,14 +165,16 @@
 										echo("<td class='completed'></td>");
 									} else if ($i == $progress - 1) {
 										echo("<td class='last'>
-												<form action='undo.php' method='post'>
+												<form method='post'>
+													<input type='hidden' name='postback' value='$_SESSION[postback]'>
 													<input type='hidden' name='undo' value=$taskid>
 													<input type='submit' name='submit' value='Undo' class='btn'>
 												</form>
 											  </td>");
 									} else if ($i == $progress){
 										echo("<td class='next'>
-												<form action='make-progress.php' method='post'>
+												<form method='post'>
+													<input type='hidden' name='postback' value='$_SESSION[postback]'>
 													<input type='hidden' name='makeProgress' value=$taskid>
 													<input type='submit' name='submit' value='Do it!' class='btn'>
 												</form>

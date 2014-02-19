@@ -4,12 +4,19 @@
 	
 	$page = "finished";
 	
-	authenticate();
-	
 	require "config.inc";
 	require "header.php";
+	require "functions.php";
+		
+	$userid = authenticate();	
 		
 	$dbconn = connectToDatabase($db_name, $db_user, $db_password);
+	
+	// undo
+	if(isset($_REQUEST['undo'])) {
+		$taskid = $_REQUEST['undo'];
+		undo($dbconn, $taskid);
+	}	
 	
 	$query = "SELECT * FROM tasks WHERE uid=$userid AND progress=total ORDER BY taskid";
 	$result = pg_query($dbconn, $query);
@@ -42,14 +49,14 @@
 									echo("<td class='completed'></td>");
 								} else if ($i == $progress - 1) {
 									echo("<td class='last'>
-											<form action='undo.php' method='post'>
+											<form method='post'>
 												<input type='hidden' name='undo' value=$taskid>
 												<input type='submit' name='submit' value='Undo' class='btn'>
 											</form>
 										  </td>");
 								} else if ($i == $progress){
 									echo("<td class='next'>
-											<form action='make-progress.php' method='post'>
+											<form method='post'>
 												<input type='hidden' name='makeProgress' value=$taskid>
 												<input type='submit' name='submit' value='Do it!' class='btn'>
 											</form>

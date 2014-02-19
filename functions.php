@@ -56,5 +56,9 @@
 
         return $dbconn; 
     }
+
+    function preventFormResubmission(){
+    	unset($_POST);
+    }
 	
 ?>

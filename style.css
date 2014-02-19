@@ -63,6 +63,10 @@ ul {
 	float: right;
 }
 
+#signup .submit a{
+	color: black;
+}
+
 #sex {
 	margin-top: 5px;
 }

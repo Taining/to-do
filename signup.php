@@ -157,7 +157,7 @@
                 <td></td>
                 <td>
                 	<input type="submit" class="submit" value="Sign Up" />
-                	<button class="submit"><a href='login.php'><font color="black">Go back</font></a></button>
+                	<button class="submit"><a href='login.php'>Go back</a></button>
                 </td>
             </tr>
         </table>

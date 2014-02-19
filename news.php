@@ -13,12 +13,9 @@
 
 	require "config.inc";
 	require "header.php";
-		
-	$dbconn = pg_connect("host=127.0.0.1 port=5432 dbname=$db_name user=$db_user password=$db_password");
-	if (!$dbconn){
-		echo("Can't connect to the database");	
-		exit;
-	}
+	include 'functions.php';
+
+	$dbconn = connectToDatabase($db_name, $db_user, $db_password);
 
 	$result = pg_query($dbconn, "SELECT U.fname, T.dscrp, T.createtime FROM appuser U, tasks T WHERE U.uid=T.uid ORDER BY T.taskid DESC LIMIT 10;");
 	echo "<div class='container'>

@@ -4,16 +4,12 @@
 
 	$page = "news";
 
-	if (isset($_SESSION['user'])) {
-		$userid = $_SESSION['user'];
-	} else {
-		header("Location: login.php");
-		exit;
-	}
-
 	require "config.inc";
 	require "header.php";
 	include 'functions.php';
+
+	//check if user if authenticated
+	authenticate();
 
 	$dbconn = connectToDatabase($db_name, $db_user, $db_password);
 

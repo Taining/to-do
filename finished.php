@@ -8,7 +8,7 @@
 	require "header.php";
 	require "functions.php";
 		
-	$userid = authenticate();	
+	$userid = authenticate();
 		
 	$dbconn = connectToDatabase($db_name, $db_user, $db_password);
 	
@@ -18,6 +18,7 @@
 		undo($dbconn, $taskid);
 	}	
 	
+	// get finished tasks
 	$query = "SELECT * FROM tasks WHERE uid=$userid AND progress=total ORDER BY taskid";
 	$result = pg_query($dbconn, $query);
 	if(pg_num_rows($result) < 1) {

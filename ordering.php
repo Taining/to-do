@@ -16,11 +16,13 @@
 <?php
 	$dbconn = connectToDatabase($db_name, $db_user, $db_password);
 	
+	// update ordering to database
 	if(isset($_REQUEST['submit'])) {
 		defineOrdering($dbconn, $_REQUEST);
 		exit;
 	}
 	
+	// get ordering info according to current sorting method
 	$query = "";
 	switch ($_SESSION['sort']) {
 		case "none":

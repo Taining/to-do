@@ -32,7 +32,8 @@
         if (isset($_POST['policy'])) {
             $policy = $_POST['policy'];
         }
-
+		
+		//register the new user into database
 		if ($errMessage == $EMPTY) {
 			$dbconn = connectToDatabase($db_name, $db_user, $db_password);
 			$insert_user_query = "INSERT INTO appuser (email, fname, lname, password, birthday, signupdate, news, sex, done) VALUES($1, $2, $3, $4, $5, $6, $7, $8, 0);";

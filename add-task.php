@@ -10,11 +10,9 @@
 	
 	$userid = authenticate();
 	
-	$dscrp = "";
-	$details = "";
-	$total = "";
-	$errMessage = "";
+	$dscrp = $details = $total = $errMessage = "";
 	
+	// add task to database
 	if (isset($_REQUEST['submit'])) {
 		if($_REQUEST['dscrp'] == "" || $_REQUEST['total'] == "") {
 			$errMessage = "Please fill in all required fields.";

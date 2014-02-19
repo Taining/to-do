@@ -14,11 +14,13 @@
 
         $email = $_POST['email'];
         $password = md5($_POST['password']);
-
+	
+		//select user info
         $select_user_query = ("SELECT * FROM appuser WHERE email = $1 AND password = $2;");
         $result = pg_prepare($dbconn, "select_user", $select_user_query);
         $result = pg_execute($dbconn, "select_user", array($email, $password));
 
+		//validate user 
         if(pg_num_rows($result)){
             $row = pg_fetch_array($result);
             $_SESSION['user'] = $row['uid'];

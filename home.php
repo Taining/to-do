@@ -64,7 +64,7 @@
 		}
 	}
 
-	//change sort methods
+	// change sort methods
 	if(!isset($_SESSION['sort'])) {
 		$_SESSION['sort'] = 'none';
 	}
